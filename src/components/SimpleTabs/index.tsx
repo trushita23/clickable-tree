@@ -3,9 +3,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import { forEach } from 'lodash';
-import { TabItem, TabProps, TriggerFunction, RenderPanel } from './@dataTypes';
-import { a11yProps } from './@utils';
-import { TabPanel } from './@components/TabPanel';
+import { TabItem, TabProps, TriggerFunction, RenderPanel } from './_dataTypes';
+import { a11yProps } from './_utils';
+import { TabPanel } from './_components/TabPanel';
 
 
 export const SimpleTabs : React.FC<TabProps> = (props) => {
@@ -44,5 +44,5 @@ export const SimpleTabs : React.FC<TabProps> = (props) => {
   );
 }
 
-export * from './@dataTypes';
-export * from './@components/TabPanel';
+export * from './_dataTypes';
+export * from './_components/TabPanel';

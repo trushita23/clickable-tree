@@ -12,17 +12,17 @@ export const SimpleTabs : React.FC<TabProps> = (props) => {
   
   const [value, setValue] = React.useState(0);
   const tabs: Array<any> = [];
-  forEach(props.items, (item: TabItem,key: number) =>  tabs.push(<Tab label={item.label} {...a11yProps(key, item.a11y)}></Tab>));
+  forEach(props.items, (item: TabItem,key: number) =>  tabs.push(<Tab key={`tab-${item.label}`} label={item.label} {...a11yProps(key, item.a11y)}></Tab>));
   
   const handleChangeDefault : TriggerFunction = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
-    if(props.handleChange != undefined) {
+    if(props.handleChange !== undefined) {
       props.handleChange(event, newValue);
     }
   }
 
   const renderPanelDefault: RenderPanel = () => {
-    if(props.renderPanel != undefined) {
+    if(props.renderPanel !== undefined) {
       return props.renderPanel(value);
     } else {
       return (<TabPanel>
@@ -30,8 +30,6 @@ export const SimpleTabs : React.FC<TabProps> = (props) => {
       </TabPanel>);
     }
   }
-
-  const handleChange: TriggerFunction = props.handleChange || handleChangeDefault;
 
   return (
     <React.Fragment>

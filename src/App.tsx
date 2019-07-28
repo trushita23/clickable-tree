@@ -1,14 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
-
-import styled, { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
 import { TriggerFunction, RenderPanel, SimpleTabs, TabPanel } from './components/SimpleTabs';
-// import CheckboxTree from './components/CheckboxTree/CheckboxTree';
-// import nodes from './data/nodes';
+import CheckBoxTreeView from './components/CheckboxTreeview';
 
 const theme = createMuiTheme();
+
 const items = [{label : 'Item'},
               {label : 'Location'},
               {label : 'Customer'},
@@ -35,6 +33,11 @@ const App: React.FC = () => {
           <Grid item xs={4}>
           <Paper>
             <SimpleTabs items={items} handleChange={handleChangeDefault} renderPanel={renderPanel}></SimpleTabs>   
+          </Paper>
+          </Grid>
+          <Grid item xs={4}>
+          <Paper>
+            <CheckBoxTreeView></CheckBoxTreeView>
           </Paper>
           </Grid>
         </Grid>

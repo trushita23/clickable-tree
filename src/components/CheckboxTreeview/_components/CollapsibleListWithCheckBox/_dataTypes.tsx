@@ -1,9 +1,6 @@
-
-import React from 'react';
-
 export interface ClListItem {
     label: string;
-    value: number;
+    value: string;
     checked: boolean;
     children?: Array<ClListItem>;
 }

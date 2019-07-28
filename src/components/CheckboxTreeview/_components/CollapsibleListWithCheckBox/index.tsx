@@ -11,7 +11,7 @@ import {
     Theme
 } from '@material-ui/core';
 import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material-ui/icons';
-import { map, isArray, forEach, compact, indexOf, keys, remove, intersection, union } from 'lodash';
+import { map, isArray, forEach, compact, indexOf, keys, remove, intersection, union, } from 'lodash';
 import { ClListProps, ClListItem } from './_dataTypes';
 
 
@@ -86,15 +86,26 @@ const getchildrenToParents = (items: any, childrenToParents: any, parent?: any) 
     })
     return childrenToParents;
 }
+const getAll = (items: any, allValues: any) => {
+    forEach(items, item => {
+        if(indexOf(allValues, item.value) === -1) {
+            allValues.push(item.value)
+        }
+        if(item.children && item.children.length) {
+            getAll(item.children, allValues);
+        }
+    })
+}
 const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     const classes = useStyles();
     const parentsToChild: any = {};
     const childrenToParents: any = {};
-
+    const allValues: any = ['all'];
     const [checked, setChecked] = React.useState(['']);
     const [open, setOpen] = React.useState(['']);
     getParentsToChild(props.items, parentsToChild);
     getchildrenToParents(props.items, childrenToParents);
+    getAll(props.items, allValues);
     const handleOpen = (value: any) => () => {
         let currentIndex: any;
         let newOpen: Array<any>;
@@ -113,49 +124,58 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
 
     const handleToggle = (value: any) => () => {
         const currentIndex = checked.indexOf(value);
-        const newChecked = compact([...checked]);
+        let newChecked: any;
         const parents = childrenToParents[value];
         const children = parentsToChild[value];
         let childrenOfParent;
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-            // Push the parent item to be checked
-            forEach(parents, parent => {
-                if (checked.indexOf(parent) === -1) {
-                    newChecked.push(parent)
-                }
-            })
-            // Select all the child elements
-            forEach(children, child => {
-                if (checked.indexOf(child) === -1) {
-                    newChecked.push(child)
-                }
-            })
+        if(value === 'all') {
+            if(currentIndex === -1) {
+                newChecked = allValues;
+            } else {
+                newChecked = [];
+            }
         } else {
-            remove(newChecked, (i, j) => currentIndex === j);
-            // Uncheck all children
-            let childIndex: number;
-
-            forEach(children, child => {
-                childIndex = newChecked.indexOf(child);
-                if (childIndex !== -1) {
-                    remove(newChecked, (i, j) => childIndex === j);
-                }
-            })
-            let parentIndex: number;
-            forEach(parents, parent => {
-                childrenOfParent = parentsToChild[parent];
-                if (intersection(childrenOfParent, newChecked).length === 0) {
-                    parentIndex = newChecked.indexOf(parent);
-                    if(parentIndex !== -1) {
-                        remove(newChecked, (i,j) => parentIndex === j);
+            newChecked = compact([...checked]);
+            if (currentIndex === -1) {
+                newChecked.push(value);
+                // Push the parent item to be checked
+                forEach(parents, parent => {
+                    if (checked.indexOf(parent) === -1) {
+                        newChecked.push(parent)
                     }
-                }
-            })
-
-
+                })
+                // Select all the child elements
+                forEach(children, child => {
+                    if (checked.indexOf(child) === -1) {
+                        newChecked.push(child)
+                    }
+                })
+            } else {
+                remove(newChecked, (i, j) => currentIndex === j);
+                // Uncheck all children
+                let childIndex: number;
+    
+                forEach(children, child => {
+                    childIndex = newChecked.indexOf(child);
+                    if (childIndex !== -1) {
+                        remove(newChecked, (i, j) => childIndex === j);
+                    }
+                })
+                let parentIndex: number;
+                forEach(parents, parent => {
+                    childrenOfParent = parentsToChild[parent];
+                    if (intersection(childrenOfParent, newChecked).length === 0) {
+                        parentIndex = newChecked.indexOf(parent);
+                        if(parentIndex !== -1) {
+                            remove(newChecked, (i,j) => parentIndex === j);
+                        }
+                    }
+                })
+    
+    
+            }
         }
+        
         setChecked(compact(newChecked));
     };
 
@@ -189,7 +209,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
         if (depth === 1) {
             const allitem = (<ListItem key='all' role={undefined} >
                 <ListItemIcon onClick={handleOpen('all')}>
-                    {(open.indexOf("all") !== -1 ? <IndeterminateCheckBoxOutlined /> : <AddBoxOutlined />)}
+                    <IndeterminateCheckBoxOutlined />
                 </ListItemIcon>
                 <ListItemIcon>
                     <Checkbox

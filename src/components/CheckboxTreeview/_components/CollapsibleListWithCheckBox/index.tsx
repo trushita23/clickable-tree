@@ -110,6 +110,19 @@ const selectChildren = (reference: any, children: any, checked: any) => {
     return checked;
 }
 
+const deSelectChildren = (reference: any, parents: any, checked: any) => {
+    forEach(parents, parent => {
+        const parentIndex = checked.indexOf(parent);
+        if (parentIndex !== -1) {
+            remove(checked, (i, j) => parentIndex === j);
+        }
+        if(reference[parent]) {
+            deSelectChildren(reference, reference[parent], checked);
+        }
+    })
+    return checked;
+}
+
 const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     const classes = useStyles();
     const parentsToChild: any = {};
@@ -166,12 +179,8 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                 // Uncheck all children
                 let childIndex: number;
     
-                forEach(children, child => {
-                    childIndex = newChecked.indexOf(child);
-                    if (childIndex !== -1) {
-                        remove(newChecked, (i, j) => childIndex === j);
-                    }
-                })
+                deSelectChildren(parentsToChild, children, newChecked);
+
                 let parentIndex: number;
                 forEach(parents, parent => {
                     childrenOfParent = parentsToChild[parent];

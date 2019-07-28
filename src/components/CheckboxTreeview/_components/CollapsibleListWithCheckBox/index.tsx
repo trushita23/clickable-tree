@@ -6,12 +6,13 @@ import {
     ListItemIcon,
     ListItemText,
     Collapse,
+    Typography,
     makeStyles,
     createStyles,
     Theme
 } from '@material-ui/core';
 import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material-ui/icons';
-import { map, isArray, forEach, compact, indexOf, keys, remove, intersection, union, } from 'lodash';
+import { map, isArray, forEach, compact, indexOf, keys, remove, intersection, union } from 'lodash';
 import { ClListProps, ClListItem } from './_dataTypes';
 
 
@@ -233,6 +234,9 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     return (
         <React.Fragment>
             {list}
+            <Typography variant="subtitle1">
+                {checked.length && checked[0] ? `${checked.length} node selected`: ""}
+            </Typography>
         </React.Fragment>
     )
 }

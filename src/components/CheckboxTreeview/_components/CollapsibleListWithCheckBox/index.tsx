@@ -97,6 +97,19 @@ const getAll = (items: any, allValues: any) => {
         }
     })
 }
+
+const selectChildren = (reference: any, children: any, checked: any) => {
+    forEach(children, child => {
+        if(indexOf(checked, child) === -1) {
+            checked.push(child)
+        }
+        if(reference[child]) {
+            selectChildren(reference, reference[child], checked);
+        }
+    })
+    return checked;
+}
+
 const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     const classes = useStyles();
     const parentsToChild: any = {};
@@ -146,11 +159,8 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                     }
                 })
                 // Select all the child elements
-                forEach(children, child => {
-                    if (checked.indexOf(child) === -1) {
-                        newChecked.push(child)
-                    }
-                })
+                selectChildren(parentsToChild, children, newChecked);
+                
             } else {
                 remove(newChecked, (i, j) => currentIndex === j);
                 // Uncheck all children

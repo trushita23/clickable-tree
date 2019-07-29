@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Fragment } from 'react';
+import React, { FunctionComponent, Fragment, Component } from 'react';
 import {
     Checkbox,
     List,
@@ -11,9 +11,10 @@ import {
     createStyles,
     Theme
 } from '@material-ui/core';
-import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material-ui/icons';
+import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove, CodeSharp } from '@material-ui/icons';
 import { map, isArray, forEach, compact, indexOf, keys, remove, intersection, union } from 'lodash';
-import { ClListProps, ClListItem } from './_dataTypes';
+import { ClListProps, ClTreeProps, ClTreeState, ClListItem, ClListState } from './_dataTypes';
+import NodeModel from './_nodeModel';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,175 +29,38 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }),
 );
-const getParentsToChild = (items: any, parentsToChild: any) => {
-    forEach(items, item => {
-        if (item.children) {
-            forEach(item.children, child => {
-                if (indexOf(keys(parentsToChild), `${item.value}`) >= 0) {
-                    if (indexOf(parentsToChild[item.value], child.value) === -1) {
-                        parentsToChild[item.value].push(child.value);
-                        if (item.children && item.children.length) {
-                            getParentsToChild(item.children, parentsToChild)
-                        }
-                    }
-                } else {
-                    parentsToChild[item.value] = [child.value];
-                    if (item.children && item.children.length) {
-                        getParentsToChild(item.children, parentsToChild)
-                    }
-                }
-            })
-        }
-    })
-    return parentsToChild;
-}
-const getchildrenToParents = (items: any, childrenToParents: any, parent?: any) => {
-    forEach(items, item => {
-        if (item.children) {
-            forEach(item.children, child => {
-                if (childrenToParents[child.vaue]) {
-                    if (indexOf(childrenToParents[child.value], item.value) === -1) {
-                        childrenToParents[child.value].push(item.value);
-                    }
-                } else {
-                    childrenToParents[child.value] = [item.value]
-                }
-                if (childrenToParents[item.value]) {
-                    childrenToParents[child.value] = union(childrenToParents[child.value], childrenToParents[item.value])
-                }
-                if (child.children && child.children.length) {
-                    getchildrenToParents(child.children, childrenToParents, child.value);
-                }
-
-
-            })
-        } else {
-            if (parent) {
-                if (childrenToParents[item.vaue]) {
-                    if (indexOf(childrenToParents[item.value], parent) === -1) {
-                        childrenToParents[item.value].push(parent);
-                    }
-                } else {
-                    childrenToParents[item.value] = [parent]
-                }
-                if (childrenToParents[parent]) {
-                    childrenToParents[item.value] = union(childrenToParents[item.value], childrenToParents[parent])
-                }
-            }
-        }
-    })
-    return childrenToParents;
-}
-const getAll = (items: any, allValues: any) => {
-    forEach(items, item => {
-        if(indexOf(allValues, item.value) === -1) {
-            allValues.push(item.value)
-        }
-        if(item.children && item.children.length) {
-            getAll(item.children, allValues);
-        }
-    })
-}
-
-const selectChildren = (reference: any, children: any, checked: any) => {
-    forEach(children, child => {
-        if(indexOf(checked, child) === -1) {
-            checked.push(child)
-        }
-        if(reference[child]) {
-            selectChildren(reference, reference[child], checked);
-        }
-    })
-    return checked;
-}
-
-const deSelectChildren = (reference: any, parents: any, checked: any) => {
-    forEach(parents, parent => {
-        const parentIndex = checked.indexOf(parent);
-        if (parentIndex !== -1) {
-            remove(checked, (i, j) => parentIndex === j);
-        }
-        if(reference[parent]) {
-            deSelectChildren(reference, reference[parent], checked);
-        }
-    })
-    return checked;
-}
 
 const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
+  
     const classes = useStyles();
-    const parentsToChild: any = {};
-    const childrenToParents: any = {};
-    const allValues: any = ['all'];
-    const [checked, setChecked] = React.useState(['']);
-    const [open, setOpen] = React.useState(['']);
-    getParentsToChild(props.items, parentsToChild);
-    getchildrenToParents(props.items, childrenToParents);
-    getAll(props.items, allValues);
+    const initialChecked: Array<string|number> = [];
+    const initialOpen: Array<string|number> = [];
+    const [treeState, setTreeState] = React.useState<ClListState>({checked:initialChecked, open:initialOpen});
+    const nodes: NodeModel = new NodeModel(props.items, treeState.checked); 
     const handleOpen = (value: any) => () => {
         let currentIndex: any;
         let newOpen: Array<any>;
-        currentIndex = open.indexOf(`${value}`);
-        newOpen = compact([...open]);
+        currentIndex = treeState.open.indexOf(`${value}`);
+        newOpen = compact([...treeState.open]);
 
         if (currentIndex === -1) {
-            if (isArray(parentsToChild[value]) && parentsToChild[value].length > 0) {
+            if (isArray(nodes.ptoc[value]) && nodes.ptoc[value].length > 0) {
                 newOpen.push(`${value}`);
             }
         } else {
             remove(newOpen, (i, j) => currentIndex === j);
         }
-        setOpen(newOpen);
+        setTreeState({checked: [...treeState.checked], open: newOpen});
     };
 
-    const handleToggle = (value: any) => () => {
-        const currentIndex = checked.indexOf(value);
-        let newChecked: any;
-        const parents = childrenToParents[value];
-        const children = parentsToChild[value];
-        let childrenOfParent;
-        if(value === 'all') {
-            if(currentIndex === -1) {
-                newChecked = allValues;
-            } else {
-                newChecked = [];
-            }
+    const handleToggle = (value: string|number) => () => {
+        if(indexOf(treeState.checked, value) === -1) {
+            nodes.selectItems(value);
         } else {
-            newChecked = compact([...checked]);
-            if (currentIndex === -1) {
-                newChecked.push(value);
-                // Push the parent item to be checked
-                forEach(parents, parent => {
-                    if (checked.indexOf(parent) === -1) {
-                        newChecked.push(parent)
-                    }
-                })
-                // Select all the child elements
-                selectChildren(parentsToChild, children, newChecked);
-                
-            } else {
-                remove(newChecked, (i, j) => currentIndex === j);
-                // Uncheck all children
-                let childIndex: number;
-    
-                deSelectChildren(parentsToChild, children, newChecked);
-
-                let parentIndex: number;
-                forEach(parents, parent => {
-                    childrenOfParent = parentsToChild[parent];
-                    if (intersection(childrenOfParent, newChecked).length === 0) {
-                        parentIndex = newChecked.indexOf(parent);
-                        if(parentIndex !== -1) {
-                            remove(newChecked, (i,j) => parentIndex === j);
-                        }
-                    }
-                })
-    
-    
-            }
+            nodes.deSelectItems(value);
         }
         
-        setChecked(compact(newChecked));
+        setTreeState({open: [...treeState.open], checked: nodes.checked});
     };
 
     const getlist = (items?: Array<ClListItem>, depth: number = 0) => {
@@ -207,12 +71,12 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                 <Fragment key={`fragment-${listItem.value}`}>
                     <ListItem key={listItem.value} role={undefined} >
                         <ListItemIcon onClick={handleOpen(listItem.value)}>
-                            {isArray(listItem.children) && listItem.children.length > 0 ? (open.indexOf(`${listItem.value}`) !== -1 ? <IndeterminateCheckBoxOutlined /> : <AddBoxOutlined />) : <Remove />}
+                            {isArray(listItem.children) && listItem.children.length > 0 ? (treeState.open.indexOf(`${listItem.value}`) !== -1 ? <IndeterminateCheckBoxOutlined /> : <AddBoxOutlined />) : <Remove />}
                         </ListItemIcon>
                         <ListItemIcon>
                             <Checkbox
                                 edge="start"
-                                checked={checked.indexOf(`${listItem.value}`) !== -1}
+                                checked={treeState.checked.indexOf(`${listItem.value}`) !== -1}
                                 tabIndex={-1}
                                 disableRipple
                                 onClick={handleToggle(listItem.value)}
@@ -220,7 +84,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                         </ListItemIcon>
                         <ListItemText id={listItem.label} primary={`${listItem.label}`} />
                     </ListItem>
-                    <Collapse in={open.indexOf(`${listItem.value}`) !== -1}>
+                    <Collapse in={treeState.open.indexOf(`${listItem.value}`) !== -1}>
                         {getlist(listItem.children, depth)}
                     </Collapse>
                 </Fragment>
@@ -234,7 +98,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                 <ListItemIcon>
                     <Checkbox
                         edge="start"
-                        checked={checked.indexOf("all") !== -1}
+                        checked={treeState.checked.indexOf("all") !== -1}
                         tabIndex={-1}
                         disableRipple
                         onClick={handleToggle('all')}
@@ -254,7 +118,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
         <React.Fragment>
             {list}
             <Typography variant="subtitle1">
-                {checked.length && checked[0] ? `${checked.length} node selected`: ""}
+                {treeState.checked.length && treeState.checked[0] ? `${treeState.checked.length} node selected`: ""}
             </Typography>
         </React.Fragment>
     )

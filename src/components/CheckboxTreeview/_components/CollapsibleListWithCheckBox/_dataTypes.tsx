@@ -7,3 +7,21 @@ export interface ClListItem {
 export interface ClListProps {
     items: Array<ClListItem>
 }
+
+export interface ClListState {
+    checked: Array<string|number>;
+    open : Array<string|number>; 
+}
+
+export interface PropertyObject {
+    [ name: string ]: Array<string|number>;
+}
+
+export type ClTreeProps = {
+    items: []
+}
+
+export type ClTreeState = {
+    checked: [],
+    open: []
+}

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Fragment, Component } from 'react';
+import React, { FunctionComponent, Fragment } from 'react';
 import {
     Checkbox,
     List,
@@ -11,9 +11,9 @@ import {
     createStyles,
     Theme
 } from '@material-ui/core';
-import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove, CodeSharp } from '@material-ui/icons';
-import { map, isArray, forEach, compact, indexOf, keys, remove, intersection, union } from 'lodash';
-import { ClListProps, ClTreeProps, ClTreeState, ClListItem, ClListState } from './_dataTypes';
+import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material-ui/icons';
+import { map, isArray,indexOf} from 'lodash';
+import { ClListProps, ClListItem, ClListState } from './_dataTypes';
 import NodeModel from './_nodeModel';
 
 
@@ -36,21 +36,11 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     const initialChecked: Array<string|number> = [];
     const initialOpen: Array<string|number> = [];
     const [treeState, setTreeState] = React.useState<ClListState>({checked:initialChecked, open:initialOpen});
-    const nodes: NodeModel = new NodeModel(props.items, treeState.checked); 
-    const handleOpen = (value: any) => () => {
-        let currentIndex: any;
-        let newOpen: Array<any>;
-        currentIndex = treeState.open.indexOf(`${value}`);
-        newOpen = compact([...treeState.open]);
+    const nodes: NodeModel = new NodeModel(props.items, treeState.checked);
 
-        if (currentIndex === -1) {
-            if (isArray(nodes.ptoc[value]) && nodes.ptoc[value].length > 0) {
-                newOpen.push(`${value}`);
-            }
-        } else {
-            remove(newOpen, (i, j) => currentIndex === j);
-        }
-        setTreeState({checked: [...treeState.checked], open: newOpen});
+    const handleOpen = (value: string|number) => () => {
+        nodes.selectOpen(value);
+        setTreeState({checked: [...treeState.checked], open: nodes.open});
     };
 
     const handleToggle = (value: string|number) => () => {

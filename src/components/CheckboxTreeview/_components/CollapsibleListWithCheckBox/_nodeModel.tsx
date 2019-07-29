@@ -1,5 +1,5 @@
-import { ClListProps, ClListItem, PropertyObject } from './_dataTypes';
-import { indexOf, forEach, remove, compact, intersection } from 'lodash';
+import { ClListItem, PropertyObject } from './_dataTypes';
+import { indexOf, forEach, remove, intersection, isArray } from 'lodash';
 
 export default class NodeModel {
     parentsToChild: any;
@@ -9,6 +9,7 @@ export default class NodeModel {
     ctop: PropertyObject = {};
     allc: Array<string|number> = []; 
     checked: Array<string|number> = [];
+    open: Array<string|number> = [];
 
     constructor(listItems: Array<ClListItem>, checked:Array<string|number>) {
         // this.getParentsToChild(listProps);
@@ -49,25 +50,34 @@ export default class NodeModel {
         })
     }
 
-    selectChildren = (selectValue: string|number, children: Array<string|number> = []) : void => {
+    selectOpen = (selectValue: string|number) : void => {
+        if (indexOf(this.open, selectValue) === -1) {
+            if (isArray(this.ptoc[selectValue]) && this.ptoc[selectValue].length > 0) {
+                this.open.push(selectValue);
+            }
+        } else {
+            remove(this.open, i => selectValue === i);
+        }
+        return;
+    }
+
+    selectChildren = (selectValue: string|number) : void => {
         forEach(this.ptoc[selectValue], (selectItem: string|number) => {
                 this.checked.push(selectItem)
             if(this.ptoc.hasOwnProperty(selectItem)) {
-                this.selectChildren(selectItem, children);
+                this.selectChildren(selectItem);
             }
         })
         return;
     }
 
-    
-
-    selectParent = (selectValue: string|number, parents: Array<string|number> = []) : void => {
+    selectParent = (selectValue: string|number) : void => {
         forEach(this.ctop[selectValue], (selectItem: string|number) => {
             if(indexOf(this.checked, selectItem) === -1) {
                 this.checked.push(selectItem)
             }
             if(this.ptoc.hasOwnProperty(selectItem)) {
-                this.selectParent(selectItem, parents);
+                this.selectParent(selectItem);
             }
         })
         return;
@@ -133,115 +143,4 @@ export default class NodeModel {
         this.deSelectParent(selectValue);
         return;
     }
-    // getParentsToChild = (items: Array<ClListItem>) : void => {
-    //     forEach(items, item => {
-    //         if (item.children) {
-    //             forEach(item.children, child => {
-    //                 if (indexOf(keys(this.parentsToChild), `${item.value}`) >= 0) {
-    //                     if (indexOf(this.parentsToChild[item.value], child.value) === -1) {
-    //                         this.parentsToChild[item.value].push(child.value);
-    //                         if (item.children && item.children.length) {
-    //                             this.getParentsToChild(item.children)
-    //                         }
-    //                     }
-    //                 } else {
-    //                     this.parentsToChild[item.value] = [child.value];
-    //                     if (item.children && item.children.length) {
-    //                         this.getParentsToChild(item.children)
-    //                     }
-    //                 }
-
-    //                 if (this.childrenToParents[child.value]) {
-    //                     if (indexOf(this.childrenToParents[child.value], item.value) === -1) {
-    //                         this.childrenToParents[child.value].push(item.value);
-    //                     }
-    //                 } else {
-    //                     this.childrenToParents[child.value] = [item.value]
-    //                 }
-    //                 if (this.childrenToParents[item.value]) {
-    //                     this.childrenToParents[child.value] = union(this.childrenToParents[child.value], this.childrenToParents[item.value])
-    //                 }
-    //                 if (child.children && child.children.length) {
-    //                     this.getchildrenToParents(child.children, child.value);
-    //                 }
-
-    //             })
-    //         }
-    //     })
-    //     return;
-    // }
-
-    // getchildrenToParents = (items: any, parent?: any) => {
-    //     forEach(items, item => {
-    //         if (item.children) {
-    //             forEach(item.children, child => {
-    //                 if (this.childrenToParents[child.vaue]) {
-    //                     if (indexOf(this.childrenToParents[child.value], item.value) === -1) {
-    //                         this.childrenToParents[child.value].push(item.value);
-    //                     }
-    //                 } else {
-    //                     this.childrenToParents[child.value] = [item.value]
-    //                 }
-    //                 if (this.childrenToParents[item.value]) {
-    //                     this.childrenToParents[child.value] = union(this.childrenToParents[child.value], this.childrenToParents[item.value])
-    //                 }
-    //                 if (child.children && child.children.length) {
-    //                     this.getchildrenToParents(child.children, child.value);
-    //                 }
-    
-    
-    //             })
-    //         } else {
-    //             if (parent) {
-    //                 if (this.childrenToParents[item.vaue]) {
-    //                     if (indexOf(this.childrenToParents[item.value], parent) === -1) {
-    //                         this.childrenToParents[item.value].push(parent);
-    //                     }
-    //                 } else {
-    //                     this.childrenToParents[item.value] = [parent]
-    //                 }
-    //                 if (this.childrenToParents[parent]) {
-    //                     this.childrenToParents[item.value] = union(this.childrenToParents[item.value], this.childrenToParents[parent])
-    //                 }
-    //             }
-    //         }
-    //     })
-    //     return;
-    // }
-
-    // getAll = (items: any,) => {
-    //     forEach(items, item => {
-    //         if(indexOf(this.allValues, item.value) === -1) {
-    //             this.allValues.push(item.value)
-    //         }
-    //         if(item.children && item.children.length) {
-    //             this.getAll(item.children);
-    //         }
-    //     })
-    // }
-    
-    // selectChildren = (reference: any, children: any, checked: any) => {
-    //     forEach(children, child => {
-    //         if(indexOf(checked, child) === -1) {
-    //             checked.push(child)
-    //         }
-    //         if(reference[child]) {
-    //             this.selectChildren(reference, reference[child], checked);
-    //         }
-    //     })
-    //     return checked;
-    // }
-    
-    // deSelectChildren = (reference: any, parents: any, checked: any) => {
-    //     forEach(parents, parent => {
-    //         const parentIndex = checked.indexOf(parent);
-    //         if (parentIndex !== -1) {
-    //             remove(checked, (i, j) => parentIndex === j);
-    //         }
-    //         if(reference[parent]) {
-    //             this.deSelectChildren(reference, reference[parent], checked);
-    //         }
-    //     })
-    //     return checked;
-    // }
 }

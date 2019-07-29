@@ -3,13 +3,14 @@ import {
     Checkbox,
     List,
     ListItem,
-    ListItemIcon,
     ListItemText,
     Collapse,
     Typography,
     makeStyles,
     createStyles,
-    Theme
+    Theme,
+    IconButton,
+    Box
 } from '@material-ui/core';
 import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material-ui/icons';
 import { map, isArray,indexOf} from 'lodash';
@@ -36,7 +37,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     const initialChecked: Array<string|number> = [];
     const initialOpen: Array<string|number> = [];
     const [treeState, setTreeState] = React.useState<ClListState>({checked:initialChecked, open:initialOpen});
-    const nodes: NodeModel = new NodeModel(props.items, treeState.checked);
+    const nodes: NodeModel = new NodeModel(props.items, treeState);
 
     const handleOpen = (value: string|number) => () => {
         nodes.selectOpen(value);
@@ -60,19 +61,17 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
             return (
                 <Fragment key={`fragment-${listItem.value}`}>
                     <ListItem key={listItem.value} role={undefined} >
-                        <ListItemIcon onClick={handleOpen(listItem.value)}>
+                        <IconButton  onClick={handleOpen(listItem.value)}>
                             {isArray(listItem.children) && listItem.children.length > 0 ? (treeState.open.indexOf(`${listItem.value}`) !== -1 ? <IndeterminateCheckBoxOutlined /> : <AddBoxOutlined />) : <Remove />}
-                        </ListItemIcon>
-                        <ListItemIcon>
+                        </IconButton>
                             <Checkbox
                                 edge="start"
-                                checked={treeState.checked.indexOf(`${listItem.value}`) !== -1}
+                                checked={treeState.checked.indexOf(listItem.value) !== -1}
                                 tabIndex={-1}
                                 disableRipple
                                 onClick={handleToggle(listItem.value)}
                             />
-                        </ListItemIcon>
-                        <ListItemText id={listItem.label} primary={`${listItem.label}`} />
+                        <ListItemText id={listItem.label} primary={listItem.label} />
                     </ListItem>
                     <Collapse in={treeState.open.indexOf(`${listItem.value}`) !== -1}>
                         {getlist(listItem.children, depth)}
@@ -82,10 +81,9 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
         });
         if (depth === 1) {
             const allitem = (<ListItem key='all' role={undefined} >
-                <ListItemIcon onClick={handleOpen('all')}>
+                <IconButton  onClick={handleOpen("all")}>
                     <IndeterminateCheckBoxOutlined />
-                </ListItemIcon>
-                <ListItemIcon>
+                </IconButton>
                     <Checkbox
                         edge="start"
                         checked={treeState.checked.indexOf("all") !== -1}
@@ -93,7 +91,6 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                         disableRipple
                         onClick={handleToggle('all')}
                     />
-                </ListItemIcon>
                 <ListItemText id="all" primary="All" />
             </ListItem>)
             list.unshift(allitem);
@@ -102,14 +99,16 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
 
 
     }
-
+    const selectedCount: number = nodes.getSelectedCount();
     const list = getlist(props.items);
     return (
         <React.Fragment>
             {list}
-            <Typography variant="subtitle1">
-                {treeState.checked.length && treeState.checked[0] ? `${treeState.checked.length} node selected`: ""}
-            </Typography>
+            <Box p={2}>
+                <Typography variant="subtitle1" >
+                    {selectedCount > 0 ? `${selectedCount} node selected`: 'None selected'}
+                </Typography>
+            </Box>
         </React.Fragment>
     )
 }

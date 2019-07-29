@@ -1,4 +1,4 @@
-import { ClListItem, PropertyObject } from './_dataTypes';
+import { ClListItem, PropertyObject, ClListState } from './_dataTypes';
 import { indexOf, forEach, remove, intersection, isArray } from 'lodash';
 
 export default class NodeModel {
@@ -11,12 +11,13 @@ export default class NodeModel {
     checked: Array<string|number> = [];
     open: Array<string|number> = [];
 
-    constructor(listItems: Array<ClListItem>, checked:Array<string|number>) {
+    constructor(listItems: Array<ClListItem>, initValues:ClListState) {
         // this.getParentsToChild(listProps);
         // this.getchildrenToParents(listProps);
         // this.getAll(listProps);
         this.flatten(listItems);
-        this.checked = checked;
+        this.checked = initValues.checked;
+        this.open = initValues.open;
     }
 
     flatten = (parents: Array<ClListItem>, depth: number = 0, parent?: string | number) => {
@@ -48,6 +49,21 @@ export default class NodeModel {
                 }
             }
         })
+    }
+
+    getSelectedCount = () : number => {
+        let count: number = 0;
+        
+        forEach(this.checked, checkedItem => {
+            if(checkedItem !== 'all' && this.ptoc.hasOwnProperty(checkedItem)) {
+                
+                if(this.ptoc[checkedItem].length === 0) {
+                    count++;
+                }
+            }
+        })
+        
+        return count;
     }
 
     selectOpen = (selectValue: string|number) : void => {

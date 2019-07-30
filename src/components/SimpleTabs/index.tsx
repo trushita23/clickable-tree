@@ -1,33 +1,41 @@
 import React from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import {Tabs, Tab, Paper} from '@material-ui/core';
 
 import { forEach } from 'lodash';
-import { TabItem, TabProps, TriggerFunction, RenderPanel } from './_dataTypes';
+import { TabItem, TabProps, TriggerFunction } from './_dataTypes';
 import { a11yProps } from './_utils';
-import { TabPanel } from './_components/TabPanel';
+//import { TabPanel } from './_components/TabPanel';
+import { useFetch } from '../../hooks';
+import CheckBoxTreeView from '../CheckboxTreeview'
 
+interface TabPanelProps {
+  value: string|number;
+}
+const GetTabPanel: React.FC<TabPanelProps> = (props) => {
+
+  //const [tabValue, setTabValue] = useState(props.value);
+  const [tabItems, Loading] = useFetch(`http://localhost:3001/jda/tabs/${props.value}`,[{label:"", value:""}])
+
+  if(Loading) {
+    return <Paper>"Loading..."</Paper>;
+  } else {
+    return <CheckBoxTreeView items={tabItems}></CheckBoxTreeView>
+  }
+}
 
 export const SimpleTabs : React.FC<TabProps> = (props) => {
-  
-  const [value, setValue] = React.useState(0);
+
+  const [value, setValue] = React.useState<string|number>(0);
+  const [tabValue, setTabValue] = React.useState<string|number>(props.items[0].value);
   const tabs: Array<any> = [];
   forEach(props.items, (item: TabItem,key: number) =>  tabs.push(<Tab key={`tab-${item.label}`} label={item.label} {...a11yProps(key, item.a11y)}></Tab>));
   
   const handleChangeDefault : TriggerFunction = (event: React.ChangeEvent<{}>, newValue: number) => {
+
     setValue(newValue);
+    setTabValue(props.items[newValue].value);
     if(props.handleChange !== undefined) {
       props.handleChange(event, newValue);
-    }
-  }
-
-  const renderPanelDefault: RenderPanel = () => {
-    if(props.renderPanel !== undefined) {
-      return props.renderPanel(value);
-    } else {
-      return (<TabPanel>
-        Item {props.items[value].label}
-      </TabPanel>);
     }
   }
 
@@ -37,7 +45,7 @@ export const SimpleTabs : React.FC<TabProps> = (props) => {
           scrollButtons="auto">
           {tabs}
         </Tabs>
-      {renderPanelDefault()}
+        {tabValue ? <GetTabPanel value={tabValue}/> : ""}
     </React.Fragment>
   );
 }

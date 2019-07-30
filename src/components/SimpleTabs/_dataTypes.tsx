@@ -2,7 +2,9 @@ import React from 'react';
 
 export interface TabItem {
     label: string,
+    value : string,
     a11y?: string,
+    checked?: false
 }
 
 

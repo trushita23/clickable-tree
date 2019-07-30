@@ -7,33 +7,39 @@ export default class NodeModel {
     allValues: any;
     ptoc: PropertyObject = {};
     ctop: PropertyObject = {};
-    allc: Array<string|number> = []; 
-    checked: Array<string|number> = [];
-    open: Array<string|number> = [];
+    allc: Array<string | number> = [];
+    checked: Array<string | number> = [];
+    open: Array<string | number> = [];
+    paths: any = {};
+    searchString: string | number = "";
+    filterItems: any = [];
+    listItems: any = {};
 
-    constructor(listItems: Array<ClListItem>, initValues:ClListState) {
-        // this.getParentsToChild(listProps);
-        // this.getchildrenToParents(listProps);
-        // this.getAll(listProps);
-        this.flatten(listItems);
+    constructor(listItems: Array<ClListItem>, initValues: ClListState, searchString:string) {
+        this.listItems = listItems;
         this.checked = initValues.checked;
         this.open = initValues.open;
+        this.searchString = searchString;
+
+        this.flatten(listItems);
+        this.setPath(listItems);
+        this.applyFilter();
     }
 
     flatten = (parents: Array<ClListItem>, depth: number = 0, parent?: string | number) => {
-        forEach(parents, (parent : ClListItem) => {
+        forEach(parents, (parent: ClListItem) => {
             this.allc.push(parent.value);
-            if(parent.children) {
+            if (parent.children) {
                 forEach(parent.children, (child: ClListItem) => {
                     this.allc.push(child.value);
                     // Set the values for Parent to Child Properties
-                    if(this.ptoc.hasOwnProperty(parent.value)) {
+                    if (this.ptoc.hasOwnProperty(parent.value)) {
                         this.ptoc[parent.value].push(child.value);
                     } else {
                         this.ptoc[parent.value] = [child.value];
                     }
                     // Set the values for Child to Parent Properties
-                    if(this.ctop.hasOwnProperty(child.value)) {
+                    if (this.ctop.hasOwnProperty(child.value)) {
                         this.ctop[child.value].push(parent.value);
                     } else {
                         this.ctop[child.value] = [parent.value]
@@ -41,32 +47,69 @@ export default class NodeModel {
                 })
 
                 // for All children flattern recursively
-            
+
                 this.flatten(parent.children, ++depth, parent.value);
             } else {
-                if(!this.ptoc.hasOwnProperty(parent.value)) {
+                if (!this.ptoc.hasOwnProperty(parent.value)) {
                     this.ptoc[parent.value] = [];
                 }
             }
         })
     }
+    getItem = (items: any, path: any) => {
+        const currentIndex = path.shift();
+        const retItem = items[currentIndex];
+        const nextItems = retItem.children;
+        if (path.length > 0) {
+            retItem.children = [];
+            retItem.children.push(this.getItem(nextItems, path));
+        }
+        return retItem;
+    }
+    applyFilter = () => {
+        if (this.searchString !== "") {
+            forEach(this.paths, (path, result) => {
+                if (result.indexOf(`${this.searchString}`) >= 0) {
+                    console.log(result, path);
+                    this.filterItems.push(this.getItem(this.listItems, `${path}`.split('-')))
+                }
+            });
+        } else {
+            this.filterItems = this.listItems;
+        }
+    }
+    setPath = (parents: any, path: any = '', parentKey?: any): void => {
+        forEach(parents, (parent, key) => {
+            if (path === '') {
+                this.paths[parent.value] = key;
+            } else {
+                this.paths[parent.value] = `${path}-${key}`;
+            }
 
-    getSelectedCount = () : number => {
+            if (parent.hasOwnProperty('children') && parent.children.length > 0) {
+                this.setPath(parent.children, this.paths[parent.value])
+            }
+        })
+
+        return;
+    }
+
+    getSelectedCount = (): number => {
         let count: number = 0;
-        
+
         forEach(this.checked, checkedItem => {
-            if(checkedItem !== 'all' && this.ptoc.hasOwnProperty(checkedItem)) {
-                
-                if(this.ptoc[checkedItem].length === 0) {
+            if (checkedItem !== 'all' && this.ptoc.hasOwnProperty(checkedItem)) {
+
+                if (this.ptoc[checkedItem].length === 0) {
                     count++;
                 }
             }
         })
-        
+
         return count;
     }
 
-    selectOpen = (selectValue: string|number) : void => {
+    selectOpen = (selectValue: string | number): void => {
         if (indexOf(this.open, selectValue) === -1) {
             if (isArray(this.ptoc[selectValue]) && this.ptoc[selectValue].length > 0) {
                 this.open.push(selectValue);
@@ -77,62 +120,62 @@ export default class NodeModel {
         return;
     }
 
-    selectChildren = (selectValue: string|number) : void => {
-        forEach(this.ptoc[selectValue], (selectItem: string|number) => {
-                this.checked.push(selectItem)
-            if(this.ptoc.hasOwnProperty(selectItem)) {
+    selectChildren = (selectValue: string | number): void => {
+        forEach(this.ptoc[selectValue], (selectItem: string | number) => {
+            this.checked.push(selectItem)
+            if (this.ptoc.hasOwnProperty(selectItem)) {
                 this.selectChildren(selectItem);
             }
         })
         return;
     }
 
-    selectParent = (selectValue: string|number) : void => {
-        forEach(this.ctop[selectValue], (selectItem: string|number) => {
-            if(indexOf(this.checked, selectItem) === -1) {
+    selectParent = (selectValue: string | number): void => {
+        forEach(this.ctop[selectValue], (selectItem: string | number) => {
+            if (indexOf(this.checked, selectItem) === -1) {
                 this.checked.push(selectItem)
             }
-            if(this.ptoc.hasOwnProperty(selectItem)) {
+            if (this.ptoc.hasOwnProperty(selectItem)) {
                 this.selectParent(selectItem);
             }
         })
         return;
     }
 
-    deSelectChildren = (selectValue: string|number) : void => {
-        forEach(this.ptoc[selectValue], (selectItem: string|number) => {
-                if(indexOf(this.checked, selectItem) !== -1) {
-                    remove(this.checked, i => i === selectItem)
-                }
-            if(this.ptoc.hasOwnProperty(selectItem)) {
+    deSelectChildren = (selectValue: string | number): void => {
+        forEach(this.ptoc[selectValue], (selectItem: string | number) => {
+            if (indexOf(this.checked, selectItem) !== -1) {
+                remove(this.checked, i => i === selectItem)
+            }
+            if (this.ptoc.hasOwnProperty(selectItem)) {
                 this.deSelectChildren(selectItem);
             }
         })
         return;
     }
 
-    deSelectParent = (selectValue: string|number) : void => {
-        forEach(this.ctop[selectValue], (parent: string|number) => {
-            if(indexOf(this.checked, parent) !== -1 && intersection(this.ptoc[parent], this.checked).length === 0) {
+    deSelectParent = (selectValue: string | number): void => {
+        forEach(this.ctop[selectValue], (parent: string | number) => {
+            if (indexOf(this.checked, parent) !== -1 && intersection(this.ptoc[parent], this.checked).length === 0) {
                 remove(this.checked, i => i === parent)
             }
-            if(this.ctop.hasOwnProperty(parent)) {
+            if (this.ctop.hasOwnProperty(parent)) {
                 this.deSelectParent(parent);
             }
-            
+
         })
         return;
     }
 
-    selectItems = (selectValue : string | number) : void => {
+    selectItems = (selectValue: string | number): void => {
         // If you are selecting all, then select all and return
-        if(selectValue === 'all') {
+        if (selectValue === 'all') {
             this.checked = ['all', ...this.allc];
             return
         }
 
         // Add current Item into selects
-        if(indexOf(this.checked, selectValue) === -1) {
+        if (indexOf(this.checked, selectValue) === -1) {
             this.checked.push(selectValue)
         }
         // Select All children of current item
@@ -143,18 +186,18 @@ export default class NodeModel {
         return;
     }
 
-    deSelectItems = (selectValue : string | number) : void => {
+    deSelectItems = (selectValue: string | number): void => {
         // If you are selecting all, then empty all checked and return
-        if(selectValue === 'all') {
+        if (selectValue === 'all') {
             this.checked = [];
             return
         }
 
         // Add current Item into selects
-        if(indexOf(this.checked, selectValue) !== -1) {
+        if (indexOf(this.checked, selectValue) !== -1) {
             remove(this.checked, i => i === selectValue)
         }
-        
+
         this.deSelectChildren(selectValue);
         this.deSelectParent(selectValue);
         return;

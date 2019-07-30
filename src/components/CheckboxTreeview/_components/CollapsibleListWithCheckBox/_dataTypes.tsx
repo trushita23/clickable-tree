@@ -11,6 +11,7 @@ export interface ClListProps {
 export interface ClListState {
     checked: Array<string|number>;
     open : Array<string|number>; 
+    search : string| number;
 }
 
 export interface PropertyObject {

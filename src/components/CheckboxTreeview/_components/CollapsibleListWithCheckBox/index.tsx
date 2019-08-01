@@ -14,7 +14,7 @@ import {
     Box
 } from '@material-ui/core';
 import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material-ui/icons';
-import { map, isArray,indexOf} from 'lodash';
+import { map, isArray,indexOf, compact} from 'lodash';
 import { ClListProps, ClListItem, ClListState } from './_dataTypes';
 import NodeModel from './_nodeModel';
 
@@ -65,7 +65,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
 
         depth++;
         const list = map(items, listItem => {
-            return (
+            return listItem ?  (
                 <Fragment key={`fragment-${listItem.value}`}>
                     <ListItem key={listItem.value} role={undefined} >
                         <IconButton  onClick={handleOpen(listItem.value)}>
@@ -84,7 +84,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                         {getlist(listItem.children, depth)}
                     </Collapse>
                 </Fragment>
-            )
+            ) : null;
         });
         if (depth === 1) {
             const allitem = (<ListItem key='all' role={undefined} >
@@ -99,7 +99,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
             </ListItem>)
             list.unshift(allitem);
         }
-        return (<List className={depth > 1 ? classes.nested : classes.root}>{list}</List>)
+        return (<List className={depth > 1 ? classes.nested : classes.root}>{compact(list)}</List>)
 
 
     }
@@ -114,10 +114,10 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                 </Typography>
                 
             </Box>
-            <Box>
+            <Box p={2}>
                     <TextField
                         id="standard-name"
-                        label="Name"
+                        label="Search"
                         value={searchString}
                         onChange={handleSearch('name')}
                         margin="normal"

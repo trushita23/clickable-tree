@@ -1,5 +1,6 @@
 import { ClListItem, PropertyObject, ClListState } from './_dataTypes';
-import { indexOf, forEach, remove, intersection, isArray } from 'lodash';
+import { indexOf, forEach, remove, intersection, isArray, omit } from 'lodash';
+
 
 export default class NodeModel {
     parentsToChild: any;
@@ -15,7 +16,7 @@ export default class NodeModel {
     filterItems: any = [];
     listItems: any = {};
 
-    constructor(listItems: Array<ClListItem>, initValues: ClListState, searchString:string) {
+    constructor(listItems: Array<ClListItem>, initValues: ClListState, searchString: string) {
         this.listItems = listItems;
         this.checked = initValues.checked;
         this.open = initValues.open;
@@ -56,39 +57,55 @@ export default class NodeModel {
             }
         })
     }
-    getItem = (items: any, path: any) => {
+    getItem = (filterItems: any, items: any, path: any, reference: Array<any> = []) => {
         const currentIndex = path.shift();
-        const retItem = items[currentIndex];
-        const nextItems = retItem.children;
-        if (path.length > 0) {
-            retItem.children = [];
-            retItem.children.push(this.getItem(nextItems, path));
+        let newReferece = items[currentIndex]; 
+        
+        if(!filterItems[currentIndex]) {
+            filterItems[currentIndex] = omit(items[currentIndex], 'children');
+             
         }
-        return retItem;
+        const nextItems = items[currentIndex].children;
+        if (path.length > 0) {
+            if(!filterItems[currentIndex].children) {
+                filterItems[currentIndex].children = [];
+            }
+            this.getItem(filterItems[currentIndex].children , nextItems, path, newReferece.children);
+        } else {
+            if(newReferece.children) {
+                filterItems[currentIndex].children = newReferece.children;
+            }
+        }
+        return ;
     }
     applyFilter = () => {
+        this.filterItems= [];
         if (this.searchString !== "") {
             forEach(this.paths, (path, result) => {
                 if (result.indexOf(`${this.searchString}`) >= 0) {
-                    console.log(result, path);
-                    this.filterItems.push(this.getItem(this.listItems, `${path}`.split('-')))
+                    this.getItem(this.filterItems, this.listItems, `${path}`.split('-'), this.listItems);
+
                 }
             });
+            //this.filterItems = this.listItems;
         } else {
             this.filterItems = this.listItems;
         }
+
     }
     setPath = (parents: any, path: any = '', parentKey?: any): void => {
+        let localPath = path || '';
         forEach(parents, (parent, key) => {
             if (path === '') {
-                this.paths[parent.value] = key;
+                localPath = key;
             } else {
-                this.paths[parent.value] = `${path}-${key}`;
+                localPath = `${path}-${key}`;
             }
 
             if (parent.hasOwnProperty('children') && parent.children.length > 0) {
-                this.setPath(parent.children, this.paths[parent.value])
+                this.setPath(parent.children, `${localPath}`)
             }
+            this.paths[parent.label] = `${localPath}`;
         })
 
         return;

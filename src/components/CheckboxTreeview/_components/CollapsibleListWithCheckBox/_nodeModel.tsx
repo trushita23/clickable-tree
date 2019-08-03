@@ -14,6 +14,7 @@ export default class NodeModel {
     paths: any = {};
     searchString: string | number = "";
     filterItems: any = [];
+    filterList: any = [];
     listItems: any = {};
 
     constructor(listItems: Array<ClListItem>, initValues: ClListState, searchString: string) {
@@ -57,13 +58,26 @@ export default class NodeModel {
             }
         })
     }
+    setChildFilterItems = (children: any) => {
+        forEach(children, child => {
+            if(indexOf(this.filterList, child.value) === -1) {
+                this.filterList.push(child.value)
+            }
+            if(child.children) {
+                this.setChildFilterItems(child.children);
+            }
+        })
+    }
     getItem = (filterItems: any, items: any, path: any, reference: Array<any> = []) => {
         const currentIndex = path.shift();
         let newReferece = items[currentIndex]; 
         
         if(!filterItems[currentIndex]) {
             filterItems[currentIndex] = omit(items[currentIndex], 'children');
-             
+            if(indexOf(this.filterList, filterItems[currentIndex].value) === -1) {
+                this.filterList.push(filterItems[currentIndex].value)
+            }
+            
         }
         const nextItems = items[currentIndex].children;
         if (path.length > 0) {
@@ -74,6 +88,7 @@ export default class NodeModel {
         } else {
             if(newReferece.children) {
                 filterItems[currentIndex].children = newReferece.children;
+                this.setChildFilterItems(newReferece.children)
             }
         }
         return ;
@@ -82,14 +97,14 @@ export default class NodeModel {
         this.filterItems= [];
         if (this.searchString !== "") {
             forEach(this.paths, (path, result) => {
-                if (result.indexOf(`${this.searchString}`) >= 0) {
+                if (result.toLowerCase().indexOf(`${this.searchString}`.toLowerCase()) >= 0) {
                     this.getItem(this.filterItems, this.listItems, `${path}`.split('-'), this.listItems);
-
                 }
             });
             //this.filterItems = this.listItems;
         } else {
             this.filterItems = this.listItems;
+            this.filterList = [];
         }
 
     }
@@ -113,8 +128,8 @@ export default class NodeModel {
 
     getSelectedCount = (): number => {
         let count: number = 0;
-
-        forEach(this.checked, checkedItem => {
+        const items = this.filterList.length ? intersection(this.checked, this.filterList) : this.checked;
+        forEach(items, checkedItem => {
             if (checkedItem !== 'all' && this.ptoc.hasOwnProperty(checkedItem)) {
 
                 if (this.ptoc[checkedItem].length === 0) {

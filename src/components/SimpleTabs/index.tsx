@@ -1,30 +1,32 @@
 import React from 'react';
-import {Tabs, Tab, Paper} from '@material-ui/core';
-
-import { forEach } from 'lodash';
-import { TabItem, TabProps, TriggerFunction } from './_dataTypes';
+import {Tabs, Tab, Paper, Typography, LinearProgress} from '@material-ui/core';
+import { forEach, omit } from 'lodash';
+import { TabItem, TabProps, TriggerFunction, CheckBoxTreeViewConfig } from './_dataTypes';
 import { a11yProps } from './_utils';
-//import { TabPanel } from './_components/TabPanel';
+import { TabPanel } from './_components/TabPanel';
 import { useFetch } from '../../hooks';
-import CheckBoxTreeView from '../CheckboxTreeview'
+import {makeStyles, createStyles, Theme} from  '@material-ui/core';
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        spaced: {
+            padding: theme.spacing(2),
+            fontWeight: 'bold',
+        }
+    }),
+);
 
-interface TabPanelProps {
-  value: string|number;
-}
-const GetTabPanel: React.FC<TabPanelProps> = (props) => {
-
-  //const [tabValue, setTabValue] = useState(props.value);
-  const [tabItems, Loading] = useFetch(`http://localhost:3001/jda/tabs/${props.value}`,[{label:"", value:""}])
-
-  if(Loading) {
-    return <Paper>"Loading..."</Paper>;
+export const DynamicTabs: React.FC<CheckBoxTreeViewConfig> = (props) =>{
+  const [items, loading] = useFetch(props.tabsUrl,[{label:"", value:""}]);
+  if(loading) {
+    return <Paper>"Loading..."<LinearProgress /></Paper>;
   } else {
-    return <CheckBoxTreeView items={tabItems}></CheckBoxTreeView>
+    return (<SimpleTabs items={items} {...omit(props, 'tabsUrl')}></SimpleTabs>)
   }
+  
 }
 
 export const SimpleTabs : React.FC<TabProps> = (props) => {
-
+  const classes = useStyles();
   const [value, setValue] = React.useState<string|number>(0);
   const [tabValue, setTabValue] = React.useState<string|number>(props.items[0].value);
   const tabs: Array<any> = [];
@@ -34,18 +36,19 @@ export const SimpleTabs : React.FC<TabProps> = (props) => {
 
     setValue(newValue);
     setTabValue(props.items[newValue].value);
-    if(props.handleChange !== undefined) {
-      props.handleChange(event, newValue);
+    if(props.tabOnChange !== undefined) {
+      props.tabOnChange(event, newValue);
     }
   }
 
   return (
     <React.Fragment>
+        {props.title && <Typography variant="body1" className={classes.spaced}>{props.title}</Typography>}
         <Tabs value={value} onChange={handleChangeDefault} aria-label="simple tabs example" variant="scrollable"
           scrollButtons="auto">
           {tabs}
         </Tabs>
-        {tabValue ? <GetTabPanel value={tabValue}/> : ""}
+        {tabValue ? <TabPanel value={tabValue} {...omit(props, ['title','items','tabsUrl','tabOnChange'])}/> : ""}
     </React.Fragment>
   );
 }

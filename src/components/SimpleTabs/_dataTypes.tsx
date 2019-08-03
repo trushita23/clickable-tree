@@ -7,11 +7,14 @@ export interface TabItem {
     checked?: false
 }
 
-
 export interface TabProps {
+    title?: string,
     items: ReadonlyArray<TabItem>;
-    handleChange?: TriggerFunction;
-    renderPanel?: RenderPanel;
+    tabOnChange?: TriggerFunction;
+    renderPanel?: Function;
+    tabPanelUrl: string,
+    collapsibelTreeView?: boolean,
+    showSelectAll?: boolean
 }
 
 export interface TriggerFunction {
@@ -20,4 +23,14 @@ export interface TriggerFunction {
 
 export interface RenderPanel {
     (value?: any): any;
+}
+
+export interface CheckBoxTreeViewConfig{
+  title?: string,
+  tabsUrl : string,
+  renderPanel?: Function,
+  tabOnChange?: TriggerFunction,
+  tabPanelUrl: string,
+  collapsibelTreeView?: boolean,
+  showSelectAll?: boolean
 }

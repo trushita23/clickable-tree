@@ -1,23 +1,19 @@
 import React from 'react';
 import { TabPanelProps } from './@dataTypes';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { Paper,LinearProgress } from '@material-ui/core';
+import { useFetch } from '../../../../hooks';
+import {omit} from 'lodash';
+import CheckBoxTreeView from '../../../CheckboxTreeview'
 
-export const TabPanel: React.FC<TabPanelProps> =  (props) => {
-    const { children, value, index, ...other } = props;
-  
-    return (
-      <Typography
-        component="div"
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        <Box p={3}>{children}</Box>
-      </Typography>
-    );
+  export const TabPanel: React.FC<TabPanelProps> = (props) => {
+
+    const [tabItems, Loading] = useFetch(`${props.tabPanelUrl}/${props.value}`,[{label:"", value:""}])  
+    if(Loading) {
+      return <Paper>"Loading..."<LinearProgress /></Paper>;
+    } else {
+      return <CheckBoxTreeView items={tabItems} {...omit(props, 'tabPanelUrl')}></CheckBoxTreeView>
+    }
+
   }
 
   export * from './@dataTypes';

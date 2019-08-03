@@ -5,7 +5,9 @@ export interface ClListItem {
     children?: Array<ClListItem>;
 }
 export interface ClListProps {
-    items: Array<ClListItem>
+    items: Array<ClListItem>,
+    collapsibelTreeView?: boolean,
+    showSelectAll?: boolean
 }
 
 export interface ClListState {

@@ -4,11 +4,14 @@ import CollapsibleListWithCheckBox, { ClListItem } from './_components/Collapsib
 interface CheckBoxTreeViewProps {
     items : Array<ClListItem>,
     collapsibelTreeView?: boolean,
-    showSelectAll?: boolean
+    showSelectAll?: boolean,
+    updateButton? : false,
+    updateButtonAction?: React.MouseEventHandler,
+    updateButtonLabel?: string
 }
 
 const CheckBoxTreeView : FunctionComponent<CheckBoxTreeViewProps> = (props) => {
-    return (<CollapsibleListWithCheckBox items={props.items}></CollapsibleListWithCheckBox>);
+    return (<CollapsibleListWithCheckBox {...props}></CollapsibleListWithCheckBox>);
 }
 
 export default CheckBoxTreeView;

@@ -16,7 +16,7 @@ const App: React.FC = () => {
           <Grid item xs={4}>
           <Paper>
                <DynamicTabs {...componenConfig}>Loading..</DynamicTabs>
-          </Paper>
+            </Paper>
           </Grid>
         </Grid>
       </div>

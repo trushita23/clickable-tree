@@ -9,6 +9,7 @@ import {
     TextField,
     makeStyles,
     createStyles,
+    Button,
     Theme,
     IconButton,
     Box
@@ -46,6 +47,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     const showSelectAll = props.showSelectAll || true;
     const [treeState, setTreeState] = React.useState<ClListState>({checked:initialChecked, open:initialOpen, search:initialSearch});
     const [searchString, setSearch] = React.useState("");
+    const updateButtonLabel = props.updateButtonLabel || "Update View"
     let nodes: NodeModel = new NodeModel(props.items, treeState, searchString);
     
     const handleOpen = (value: string|number) => () => {
@@ -124,6 +126,11 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     }
     const selectedCount: number = nodes.getSelectedCount();
     const list = getlist(nodes.filterItems);
+    const handleUpdateView : React.MouseEventHandler = (event: React.MouseEvent<Element, MouseEvent>) => {
+       if(props.updateButtonAction) {
+           props.updateButtonAction(event)
+      }
+    }
     return (
         <React.Fragment>
             {list}
@@ -142,6 +149,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                         margin="normal"
                     />
                 </Box>
+                { props.updateButton && <Button onClick={handleUpdateView}>{updateButtonLabel}</Button>}
         </React.Fragment>
     )
 }

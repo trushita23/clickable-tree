@@ -32,5 +32,8 @@ export interface CheckBoxTreeViewConfig{
   tabOnChange?: TriggerFunction,
   tabPanelUrl: string,
   collapsibelTreeView?: boolean,
-  showSelectAll?: boolean
+  showSelectAll?: boolean,
+  updateButton? : false,
+  updateButtonAction?: React.MouseEventHandler,
+  updateButtonLabel?: string
 }

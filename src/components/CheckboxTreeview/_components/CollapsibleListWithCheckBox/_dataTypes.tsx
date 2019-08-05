@@ -7,7 +7,10 @@ export interface ClListItem {
 export interface ClListProps {
     items: Array<ClListItem>,
     collapsibelTreeView?: boolean,
-    showSelectAll?: boolean
+    showSelectAll?: boolean,
+    updateButtonLabel? :string,
+    updateButton?:Boolean,
+    updateButtonAction?: React.MouseEventHandler
 }
 
 export interface ClListState {

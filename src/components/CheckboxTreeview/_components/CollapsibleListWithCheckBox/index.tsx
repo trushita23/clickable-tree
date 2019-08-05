@@ -18,17 +18,11 @@ import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material
 import { map, isArray,indexOf, compact} from 'lodash';
 import { ClListProps, ClListItem, ClListState } from './_dataTypes';
 import NodeModel from './_nodeModel';
-import theme from '../../../../theme/muiTheme';
-//Temporary color imported. Need to move it from here.
-import { blue } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             backgroundColor: theme.palette.background.paper,
-						'&$checked': {
-              color: blue[300],
-            },
         },
         nested: {
             paddingLeft: theme.spacing(4),
@@ -102,10 +96,6 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                                 tabIndex={-1}
                                 disableRipple
                                 onClick={handleToggle(listItem.value)}
-																classes={{
-                                   root: classes.root,
-                                   checked: classes.checked,
-                                 }}
                             />
                         {getFilterHighlight(listItem.label)}
                     </ListItem>
@@ -123,10 +113,6 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                         tabIndex={-1}
                         disableRipple
                         onClick={handleToggle('all')}
-												classes={{
-                                   root: classes.root,
-                                   checked: classes.checked,
-                                 }}
                     />
                 <ListItemText id="all" primary="All" />
             </ListItem>)

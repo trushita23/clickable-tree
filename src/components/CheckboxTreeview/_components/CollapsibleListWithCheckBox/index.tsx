@@ -17,18 +17,22 @@ import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material
 import { map, isArray,indexOf, compact} from 'lodash';
 import { ClListProps, ClListItem, ClListState } from './_dataTypes';
 import NodeModel from './_nodeModel';
-
+import theme from '../../../../theme/muiTheme';
+//Temporary color imported. Need to move it from here.
+import { blue } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: '100%',
-            maxWidth: 360,
             backgroundColor: theme.palette.background.paper,
+						'&$checked': {
+              color: blue[300],
+            },
         },
         nested: {
             paddingLeft: theme.spacing(4),
         },
+				checked: {},
         highlight: {
             background: theme.palette.secondary.light,
             padding: theme.spacing(.3,0,.3,.3)
@@ -37,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
-  
+
     const classes = useStyles();
     const initialChecked: Array<string|number> = [];
     const initialOpen: Array<string|number> = [];
@@ -47,7 +51,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     const [treeState, setTreeState] = React.useState<ClListState>({checked:initialChecked, open:initialOpen, search:initialSearch});
     const [searchString, setSearch] = React.useState("");
     let nodes: NodeModel = new NodeModel(props.items, treeState, searchString);
-    
+
     const handleOpen = (value: string|number) => () => {
         nodes.selectOpen(value);
         setTreeState({checked: [...treeState.checked], open: nodes.open, search: treeState.search});
@@ -74,7 +78,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
         } else {
             text = <ListItemText id={label}>{label}</ListItemText>
         }
-        
+
         return text;
     }
 
@@ -84,9 +88,9 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
         const list = map(items, listItem => {
             return listItem ?  (
                 <Fragment key={`fragment-${listItem.value}`}>
-                    
+
                     <ListItem key={listItem.value} role={undefined} >
-                        { collapsibelTreeView  && <IconButton  onClick={handleOpen(listItem.value)}> 
+                        { collapsibelTreeView  && <IconButton  onClick={handleOpen(listItem.value)}>
                             {isArray(listItem.children) && listItem.children.length > 0 ? (treeState.open.indexOf(`${listItem.value}`) !== -1 ? <IndeterminateCheckBoxOutlined /> : <AddBoxOutlined />) : <Remove />}
                         </IconButton>
                         }
@@ -96,6 +100,10 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                                 tabIndex={-1}
                                 disableRipple
                                 onClick={handleToggle(listItem.value)}
+																classes={{
+                                   root: classes.root,
+                                   checked: classes.checked,
+                                 }}
                             />
                         {getFilterHighlight(listItem.label)}
                     </ListItem>
@@ -113,6 +121,10 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                         tabIndex={-1}
                         disableRipple
                         onClick={handleToggle('all')}
+												classes={{
+                                   root: classes.root,
+                                   checked: classes.checked,
+                                 }}
                     />
                 <ListItemText id="all" primary="All" />
             </ListItem>)
@@ -131,7 +143,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                 <Typography variant="subtitle1" >
                     {selectedCount > 0 ? `${selectedCount} node selected`: 'None selected'}
                 </Typography>
-                
+
             </Box>
             <Box p={2}>
                     <TextField

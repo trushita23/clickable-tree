@@ -12,9 +12,10 @@ import {
     Button,
     Theme,
     IconButton,
-    Box
+    Box,
+    Grid
 } from '@material-ui/core';
-import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove } from '@material-ui/icons';
+import { AddBoxOutlined, IndeterminateCheckBoxOutlined, Remove, SaveSharp } from '@material-ui/icons';
 import { map, isArray,indexOf, compact} from 'lodash';
 import { ClListProps, ClListItem, ClListState } from './_dataTypes';
 import NodeModel from './_nodeModel';
@@ -27,10 +28,18 @@ const useStyles = makeStyles((theme: Theme) =>
         nested: {
             paddingLeft: theme.spacing(4),
         },
-				checked: {},
+
         highlight: {
             background: theme.palette.secondary.light,
             padding: theme.spacing(.3,0,.3,.3)
+        },
+        listcontainer: {
+            borderLeft: '1px solid',
+            borderRight: '1px solid',
+            borderBottom: '1px solid',
+            height: theme.spacing(60),
+            overflowY: 'scroll'
+
         }
     }),
 );
@@ -94,7 +103,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                                 edge="start"
                                 checked={treeState.checked.indexOf(listItem.value) !== -1}
                                 tabIndex={-1}
-                                disableRipple
+                                disableRipple={true}
                                 onClick={handleToggle(listItem.value)}
                             />
                         {getFilterHighlight(listItem.label)}
@@ -131,23 +140,37 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
     }
     return (
         <React.Fragment>
-            {list}
-            <Box p={2}>
-                <Typography variant="subtitle1" >
-                    {selectedCount > 0 ? `${selectedCount} node selected`: 'None selected'}
-                </Typography>
-
+            <Box className={classes.listcontainer}>{list}</Box>
+            <Grid container> 
+                <Grid item xs={6}> 
+                    <Box p={1} color={"text.disabled"}>
+                        <Typography variant="subtitle1">
+                            {selectedCount > 0 ? `${selectedCount} node selected`: 'None selected'}
+                        </Typography>
+                    </Box>
+                </Grid>
+                <Grid item >
+                    <Grid container justify="flex-end" direction="column" alignItems="flex-end">
+                        <IconButton disableFocusRipple={true}>
+                            <SaveSharp></SaveSharp>
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Box m={1}>
+                <TextField
+                    id="standard-name"
+                    label="Search"
+                    value={searchString}
+                    onChange={handleSearch('name')}
+                    margin="dense"
+                    variant="outlined"
+                    fullWidth
+                />
             </Box>
-            <Box p={2}>
-                    <TextField
-                        id="standard-name"
-                        label="Search"
-                        value={searchString}
-                        onChange={handleSearch('name')}
-                        margin="normal"
-                    />
-                </Box>
-                { props.updateButton && <Button onClick={handleUpdateView}>{updateButtonLabel}</Button>}
+            <Box m={1}>
+                { props.updateButton && <Button onClick={handleUpdateView} color="primary" fullWidth>{updateButtonLabel}</Button>}
+            </Box>
         </React.Fragment>
     )
 }

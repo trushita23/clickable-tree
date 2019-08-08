@@ -1,8 +1,13 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme} from '@material-ui/core/styles';
 import { blue,grey } from '@material-ui/core/colors';
 
 
 const theme = createMuiTheme({
+  tab: {
+    panel : {
+    borderStyle: 'solid',
+    border:1
+  }},
   typography: {
     useNextVariants: true,
     fontSize: 12,
@@ -13,22 +18,39 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#64b5f6',
+      light: "#ffffff"
     },
   },
   overrides: {
     MuiTabs: {
       root: {
         color: blue[900],
+        minHeight: 24,
+        height: 24
       },
+      scrollButtonsDesktop : {
+          borderBottom: '1px solid'
+      }
     },
     MuiTab: {
       root: {
         '&$selected': {
           color: grey[700],
+          borderTop: 1,
+          borderRight: 1,
+          borderLeft: 1,
+          borderStyle: 'solid',
+          borderBottom: 'none',
+          marginRIght: 2,
         },
-
+        borderBottom: '1px solid',
+        maxWidth: 150,
+        minHeight: 24,
+        height: 24,
         textTransform: 'none',
-        fontWeight:600
+        fontWeight:600,
+        padding: 3,
+        
       },
     },
     MuiList: {

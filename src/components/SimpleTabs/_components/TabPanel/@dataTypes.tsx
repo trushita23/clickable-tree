@@ -7,5 +7,7 @@ export interface TabPanelProps {
     renderPanel?: Function,
     tabPanelUrl?: string,
     collapsibelTreeView?: boolean,
-    showSelectAll?: boolean
+    showSelectAll?: boolean,
+    onSelectItem?:Function,
+    secondaryColor:string
   }

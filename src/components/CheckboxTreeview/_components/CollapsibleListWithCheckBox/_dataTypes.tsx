@@ -10,7 +10,8 @@ export interface ClListProps {
     showSelectAll?: boolean,
     updateButtonLabel? :string,
     updateButton?:Boolean,
-    updateButtonAction?: React.MouseEventHandler
+    updateButtonAction?: React.MouseEventHandler,
+    onSelectItem?: Function
 }
 
 export interface ClListState {

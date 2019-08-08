@@ -14,7 +14,8 @@ export interface TabProps {
     renderPanel?: Function;
     tabPanelUrl: string,
     collapsibelTreeView?: boolean,
-    showSelectAll?: boolean
+    showSelectAll?: boolean,
+    onSelectItem?: Function
 }
 
 export interface TriggerFunction {
@@ -33,7 +34,8 @@ export interface CheckBoxTreeViewConfig{
   tabPanelUrl: string,
   collapsibelTreeView?: boolean,
   showSelectAll?: boolean,
-  updateButton? : false,
+  updateButton? : boolean,
   updateButtonAction?: React.MouseEventHandler,
-  updateButtonLabel?: string
+  updateButtonLabel?: string,
+  onSelectItem?: Function
 }

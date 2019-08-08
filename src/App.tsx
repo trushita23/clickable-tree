@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper } from "@material-ui/core";
+import { Grid, Paper, Box } from "@material-ui/core";
 import { DynamicTabs, CheckBoxTreeViewConfig } from './components/SimpleTabs';
 
 const componenConfig: CheckBoxTreeViewConfig = {
@@ -8,6 +8,7 @@ const componenConfig: CheckBoxTreeViewConfig = {
   tabPanelUrl : "http://localhost:3001/jda/tabs", // tab value gets appended to this URL
   collapsibelTreeView: false,
   showSelectAll :true,
+  updateButton: true
 }
 const App: React.FC = () => {
   return (
@@ -15,7 +16,9 @@ const App: React.FC = () => {
         <Grid container spacing={0}>
           <Grid item xs={4}>
           <Paper>
-               <DynamicTabs {...componenConfig}>Loading..</DynamicTabs>
+              <Box p={1}>
+                <DynamicTabs {...componenConfig}>Loading..</DynamicTabs>
+               </Box>
             </Paper>
           </Grid>
         </Grid>

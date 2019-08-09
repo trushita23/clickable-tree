@@ -14,13 +14,18 @@ const componenConfig = {
   showSelectAll :true,
 }
 
-describe('App component testcases', () =>{
+fdescribe('App component testcases', () =>{
   it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(<App />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
   
+  it('should check one div tag', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find('div').length).toEqual(1);
+  });
+
   it('renders without crashing2', () => {
     const wrapper = shallow(<App />);
     const paper = <Paper>

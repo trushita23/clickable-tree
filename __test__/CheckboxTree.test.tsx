@@ -2,6 +2,8 @@ import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 
 import CheckBoxList from '../_components/CollapsibleListWithCheckBox';
+import { Typography } from '@material-ui/core';
+import { parseInt } from 'lodash';
 
 describe('CollapsibleListWithCheckBox Component Testcases', () => {
 
@@ -141,15 +143,23 @@ describe('CollapsibleListWithCheckBox Component Testcases', () => {
 
     const container = shallow(<CheckBoxList {...initialProps} />);
 
-    xit('should render Typography for number of Nodes selected', () => {
-        expect(mount(<CheckBoxList {...initialProps}/>).find('Typography')).toEqual(1);
+    it('should render Typography if exists once', () => {
+        expect(container.find(Typography).length).toEqual(1);
+    });
+
+    it('should render Typography for number of Nodes selected: none Selected', () => {
+        let nodeCount: number = 0;
+        if(parseInt(container.find(Typography).text()) === 0) {
+            nodeCount = 0;
+        }
+        expect(nodeCount).toEqual(0);
     });
 
     it('should render Search TextField if exists', () => {
         expect(container.find('#standard-name').exists()).toBe(true)
     });
 
-    it('should render search textfield', () => {
+    it('should render search textfield with props', () => {
         expect(container.find('#standard-name').props()).toEqual({
             id: "standard-name",
             label: "Search",

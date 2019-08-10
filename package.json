@@ -3,21 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.2.1",
+    "@material-ui/core": "^4.3.1",
     "@material-ui/icons": "^4.2.1",
-    "@material-ui/styles": "^4.2.1",
-    "@types/jest": "24.0.15",
+    "@material-ui/styles": "^4.3.0",
     "@types/lodash": "^4.14.136",
-    "@types/node": "^12.6.8",
+    "@types/node": "^12.7.1",
     "@types/prop-types": "^15.7.1",
-    "@types/react": "^16.8.23",
+    "@types/react": "^16.9.1",
     "@types/react-dom": "16.8.5",
     "@types/styled-components": "^4.1.18",
     "classnames": "^2.2.6",
     "lodash": "^4.17.15",
     "nanoid": "^2.0.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-scripts": "3.0.1",
     "styled-components": "^4.3.2",
     "typescript": "3.5.3"
@@ -25,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -45,7 +44,21 @@
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.test.tsx",
+      "!src/**/_dataTypes.tsx",
+      "!<rootDir>/node_modules/",
+      "!src/index.tsx",
+      "!src/react-app-env.d.ts",
+      "!src/serviceWorker.ts"
+    ]
+  },
   "devDependencies": {
+    "@types/enzyme": "^3.10.3",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.17",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0"
   },

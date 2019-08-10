@@ -23,12 +23,14 @@ import NodeModel from './_nodeModel';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            backgroundColor: theme.palette.background.paper,
+            paddingLeft: theme.spacing(0),
         },
         nested: {
             paddingLeft: theme.spacing(4),
         },
-
+        smallFont: {
+            fontSize: .5
+        },
         highlight: {
             background: theme.palette.secondary.light,
             padding: theme.spacing(.3,0,.3,.3)
@@ -79,9 +81,9 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
         const start = label.toLowerCase().indexOf(searchString.toLowerCase())
         if(searchString &&  start !== -1) {
             const end = start + `${searchString}`.length;
-            text = <ListItemText id={label}>{start === 0 ? "" : label.slice(0,start-1)}<span className={classes.highlight}>{label.slice(start, end)}</span>{label.slice(end)}</ListItemText>
+            text = <ListItemText className={classes.smallFont} id={label}>{start === 0 ? "" : label.slice(0,start-1)}<span className={classes.highlight}>{label.slice(start, end)}</span>{label.slice(end)}</ListItemText>
         } else {
-            text = <ListItemText id={label}>{label}</ListItemText>
+            text = <ListItemText id={label} className={classes.smallFont}>{label}</ListItemText>
         }
 
         return text;
@@ -143,18 +145,25 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
             <Box className={classes.listcontainer}>{list}</Box>
             <Grid container> 
                 <Grid item xs={6}> 
-                    <Box p={1} color={"text.disabled"}>
+                    <Box color={"text.disabled"}>
                         <Typography variant="subtitle1">
                             {selectedCount > 0 ? `${selectedCount} node selected`: 'None selected'}
                         </Typography>
                     </Box>
                 </Grid>
-                <Grid item >
+                <Grid item xs={3}>
                     <Grid container justify="flex-end" direction="column" alignItems="flex-end">
-                        <IconButton disableFocusRipple={true}>
+                        <IconButton disableFocusRipple={true} disableRipple={true}>
                             <SaveSharp></SaveSharp>
                         </IconButton>
                     </Grid>
+                </Grid>
+                <Grid item xs={3}>
+                    <Box color="text.disabled">
+                        <Typography variant="subtitle1">
+                            Clear All
+                        </Typography>
+                    </Box>
                 </Grid>
             </Grid>
             <Box m={1}>
@@ -169,7 +178,7 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
                 />
             </Box>
             <Box m={1}>
-                { props.updateButton && <Button onClick={handleUpdateView} color="primary" fullWidth>{updateButtonLabel}</Button>}
+                { props.updateButton && <Button onClick={handleUpdateView} variant="contained" color="primary" fullWidth>{updateButtonLabel}</Button>}
             </Box>
         </React.Fragment>
     )

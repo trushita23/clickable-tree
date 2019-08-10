@@ -14,7 +14,7 @@ const App: React.FC = () => {
   return (
       <div className="App">
         <Grid container spacing={0}>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
           <Paper>
               <Box p={1}>
                 <DynamicTabs {...componenConfig}>Loading..</DynamicTabs>

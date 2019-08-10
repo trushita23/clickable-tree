@@ -147,15 +147,7 @@ describe('CollapsibleListWithCheckBox Component Testcases', () => {
     const container = shallow(<CheckBoxList {...initialProps} />);
 
     it('should render Typography if exists once', () => {
-        expect(container.find(Typography).length).toEqual(1);
-    });
-
-    it('should render Typography for number of Nodes selected: none Selected', () => {
-        let nodeCount: number = 0;
-        if(parseInt(container.find(Typography).text()) === 0) {
-            nodeCount = 0;
-        }
-        expect(nodeCount).toEqual(0);
+        expect(container.find(Typography).length).toBeGreaterThan(0);
     });
 
     it('should render Search TextField if exists', () => {

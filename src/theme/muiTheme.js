@@ -10,7 +10,7 @@ const theme = createMuiTheme({
   }},
   typography: {
     useNextVariants: true,
-    fontSize: 12,
+    fontSize: 10,
   },
   palette: {
     primary: {
@@ -18,7 +18,6 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#64b5f6',
-      light: "#ffffff"
     },
   },
   overrides: {
@@ -65,6 +64,21 @@ const theme = createMuiTheme({
         paddingBottom: 0,
       },
     },
+    PrivateSwitchBase: {
+      root: {
+        padding: 2
+      }
+    },
+    MuiIconButton: {
+      root: {
+        padding: 0
+      }
+    },
+    textField: {
+      [`& fieldset`]: {
+        borderRadius: 0,
+      },
+    }
   },
 });
 

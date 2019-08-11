@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { shallow, mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {omit} from 'lodash'; 
-import CheckBoxList from './_components/CollapsibleListWithCheckBox';
+import CheckBoxList from './index';
 import { Typography } from '@material-ui/core';
 import { parseInt } from 'lodash';
 
@@ -147,7 +146,7 @@ describe('CollapsibleListWithCheckBox Component Testcases', () => {
     const container = shallow(<CheckBoxList {...initialProps} />);
 
     it('should render Typography if exists once', () => {
-        expect(container.find(Typography).length).toBeGreaterThan(0);
+        expect(container.find(Typography).length).toBeGreaterThanOrEqual(1);
     });
 
     it('should render Search TextField if exists', () => {
@@ -156,13 +155,11 @@ describe('CollapsibleListWithCheckBox Component Testcases', () => {
 
     it('should render search textfield with props', () => {
         expect(container.find('#standard-name').props()).toMatchObject({
-          fullWidth: true,
-        id: "standard-name", 
-        label: "Search", 
-        margin: "dense", 
-        value: "", 
-        variant: "outlined"}
-        );
+            id: "standard-name",
+            label: "Search",
+            value: "",
+            margin: "dense"
+        });
     });
 
     it('should set the search value on change event', () => {

@@ -24,8 +24,8 @@ describe('Testing App', () =>{
 
   it('Check for Dynamic Tabs', () => {
     const wrapper = shallow(<App />);
-    const paper = <DynamicTabs {...componenConfig}>Loading..</DynamicTabs>
-    const text = wrapper.find('DynamicTabs').text()
+    //const paper = <DynamicTabs {...componenConfig}>Loading..</DynamicTabs>
+    //const text = wrapper.find('DynamicTabs').text()
     expect(wrapper.find(DynamicTabs).length).toBeGreaterThan(0);
   });
 });

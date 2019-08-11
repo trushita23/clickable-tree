@@ -4,7 +4,7 @@ import { forEach, omit } from 'lodash';
 import { TabItem, TabProps, TriggerFunction, CheckBoxTreeViewConfig } from './_dataTypes';
 import { a11yProps } from './_utils';
 import { TabPanel } from './_components/TabPanel';
-import { useFetch } from '../../hooks';
+import * as hooks  from '../../hooks';
 import {makeStyles, createStyles, Theme} from  '@material-ui/core';
 import theme from '../../theme/muiTheme'
 const secondaryColor: string = theme.palette.secondary.main;
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 export const DynamicTabs: React.FC<CheckBoxTreeViewConfig> = (props) =>{
-  const [items, loading] = useFetch(props.tabsUrl,[{label:"", value:""}]);
+  const [items, loading] = hooks.useFetch(props.tabsUrl,[{label:"", value:""}]);
   if(loading) {
     return <Paper>"Loading..."<LinearProgress /></Paper>;
   } else {
@@ -46,6 +46,7 @@ export const SimpleTabs : React.FC<TabProps> = (props) => {
       props.tabOnChange(event, newValue);
     }
   }
+
   theme.palette.secondary.main = "#FFFFFF";
   return (
     <React.Fragment>

@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, configure } from 'enzyme';
 import axios from 'axios';
 import { TabPanel } from '../_components/TabPanel';
 import { SimpleTabs } from '../index';
 import { Tabs, Typography } from '@material-ui/core';
+import Adapter from 'enzyme-adapter-react-16';
 
 jest.mock('axios');
 
+configure({adapter: new Adapter()})
 describe('TabPanel Component Testcases', () => {
     xit('should fetch data for TabPanel component', () => {
         const getSpy = jest.spyOn(axios, 'get');

@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
+const CheckBoxTreeView: FunctionComponent<ClListProps> = (props) => {
 
     const classes = useStyles();
     const initialChecked: Array<string|number> = [];
@@ -185,4 +185,4 @@ const CheckBoxList: FunctionComponent<ClListProps> = (props) => {
 }
 
 export * from './_dataTypes';
-export default CheckBoxList;
+export default CheckBoxTreeView;

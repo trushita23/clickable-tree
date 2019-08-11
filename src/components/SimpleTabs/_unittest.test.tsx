@@ -57,5 +57,5 @@ describe('Testing Simple Tabs ', () =>{
     expect(container.exists(Tabs)).toBeTruthy;
   })
   
-  // @TODO : change of Tab to be checked  
+  // TODO : change of Tab to be checked  
 });

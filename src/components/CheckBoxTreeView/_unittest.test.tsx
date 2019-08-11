@@ -1,149 +1,22 @@
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 import { shallow, mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import CheckBoxList from './index';
 import { Typography } from '@material-ui/core';
 import { parseInt } from 'lodash';
+import { initialProps } from './_mockdata';
 
 configure({adapter: new Adapter()});
 
 describe('CollapsibleListWithCheckBox Component Testcases', () => {
 
-    const initialProps = {
-        items: [{
-            label: 'India',
-            value : 'India',
-            checked : false,
-            children : [
-                {
-                    label : 'Maharastra',
-                    value : 'Maharastra',
-                    checked : false,
-                    children : [
-                        {
-                            label: 'Pune',
-                            value: 'Pune',
-                            checked : false,
-                        },
-                        {
-                            label: 'Mumbai',
-                            value: 'Mumbai',
-                            checked : false,
-                        },
-                    ]
-                },
-                {
-                    label : 'Punjab',
-                    value : 'Punjab',
-                    checked : false,
-                    children : [
-                        {
-                            label: 'Amritsar',
-                            value: 'Amritsar',
-                            checked : false,
-                        },
-                        {
-                            label: 'Bhatinda',
-                            value: 'Bhatinda',
-                            checked : false,
-                        },
-                    ]
-                },
-                {
-                    label : 'Karnataka',
-                    value : 'Karnataka',
-                    checked : false,
-                    children : [
-                        {
-                            label: 'Bengaluru',
-                            value: 'Bengaluru',
-                            checked : false,
-                        },
-                        {
-                            label: 'Mysuru',
-                            value: 'Mysuru',
-                            checked : false,
-                        },
-                    ]
-                }
-            ]
-        },
-        {
-            label: 'England',
-            value : 'England',
-            checked : false,
-            children : [
-                {
-                    label : 'Berkshire',
-                    value : 'Berkshire',
-                    checked : false,
-                    children : [
-                        {
-                            label: 'Reading',
-                            value: 'Reading',
-                            checked : false,
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            label: 'New Zealand',
-            value : 'New Zealand',
-            checked : false,
-            children : [
-                {
-                    label : 'Wellington',
-                    value : 'Wellington',
-                    checked : false,
-                },
-                {
-                    label : 'Otago',
-                    value : 'Otago',
-                    checked : false,
-                    children : [
-                        {
-                            label: 'Queenstown',
-                            value: 'Queenstown',
-                            checked : false,
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            label: 'Australia',
-            value : 'Australia',
-            checked : false,
-            children : [
-                {
-                    label : 'Victoria',
-                    value : 'Victoria',
-                    checked : false,
-                }
-            ]
-        },
-        {
-            label: 'West Indies',
-            value : 'West Indies',
-            checked : false,
-            children : [
-                {
-                    label : 'Barbados',
-                    value : 'Barbados',
-                    checked : false,
-                },
-                {
-                    label : 'Trinidad and Tobago',
-                    value : 'Trinidad and Tobago',
-                    checked : false,
-                }
-            ]
-        }],
-        collapsibelTreeView: false
-    }
-
     const container = shallow(<CheckBoxList {...initialProps} />);
+    it('Renders CheckBoxList without Crashing', () => {
+        const div = document.createElement('div');
+        ReactDOM.render(<CheckBoxList {...initialProps} />, div);
+        ReactDOM.unmountComponentAtNode(div);
+      });
 
     it('should render Typography if exists once', () => {
         expect(container.find(Typography).length).toBeGreaterThanOrEqual(1);
@@ -172,4 +45,13 @@ describe('CollapsibleListWithCheckBox Component Testcases', () => {
           'India',
         );
     });
+    // TODO: Tree view is populated
+    // TODO: clicking the checkbox selects the item
+    // TODO: If the checkbox is already selceted the click should uncheck item
+    // TODO: click event on child selects all the parent
+    // TODO: click event on parent selects all the children
+    // TODO: click on All selects all 
+    // TODO: click on All when it is already selected clears all
+    // TODO: Searching an Item should highlight the item
+    // TODO: Searching an Item should filter out the items
 });

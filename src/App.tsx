@@ -1,29 +1,29 @@
-import React from 'react';
+import React from "react";
 import { Grid, Paper, Box } from "@material-ui/core";
-import { DynamicTabs, CheckBoxTreeViewConfig } from './components/SimpleTabs';
+import { DynamicTabs, CheckBoxTreeViewConfig } from "./components/SimpleTabs";
 
-const componenConfig: CheckBoxTreeViewConfig = {
+const componentConfig: CheckBoxTreeViewConfig = {
   title: "View Controller",
-  tabsUrl : "http://localhost:3001/jda/tabs",
-  tabPanelUrl : "http://localhost:3001/jda/tabs", // tab value gets appended to this URL
+  tabsUrl: "http://localhost:3001/jda/tabs",
+  tabPanelUrl: "http://localhost:3001/jda/tabs", // tab value gets appended to this URL
   collapsibelTreeView: false,
-  showSelectAll :true,
+  showSelectAll: true,
   updateButton: true
-}
+};
 const App: React.FC = () => {
   return (
-      <div className="App">
-        <Grid container spacing={0}>
-          <Grid item xs={3}>
+    <div className="App">
+      <Grid container spacing={0}>
+        <Grid item xs={3}>
           <Paper>
-              <Box p={1}>
-                <DynamicTabs {...componenConfig}>Loading..</DynamicTabs>
-               </Box>
-            </Paper>
-          </Grid>
+            <Box p={1}>
+              <DynamicTabs {...componentConfig}>Loading..</DynamicTabs>
+            </Box>
+          </Paper>
         </Grid>
-      </div>
+      </Grid>
+    </div>
   );
-}
+};
 
 export default App;

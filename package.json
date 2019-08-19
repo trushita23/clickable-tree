@@ -11,13 +11,19 @@
     "@types/prop-types": "^15.7.1",
     "@types/react": "^16.9.1",
     "@types/react-dom": "16.8.5",
+    "@types/react-redux": "^7.1.1",
     "@types/styled-components": "^4.1.18",
     "classnames": "^2.2.6",
     "lodash": "^4.17.15",
     "nanoid": "^2.0.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-redux": "^7.1.0",
     "react-scripts": "3.0.1",
+    "redux": "^4.0.4",
+    "redux-dynamic-modules": "^5.0.2",
+    "redux-dynamic-modules-saga": "^5.0.2",
+    "redux-saga": "^1.0.5",
     "styled-components": "^4.3.2",
     "typescript": "3.5.3"
   },
@@ -62,7 +68,9 @@
     "@types/sinon": "^7.0.13",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
-    "sinon": "^7.4.1"
+    "sinon": "^7.4.1",
+    "testcafe": "^1.4.0",
+    "testcafe-react-selectors": "^3.1.0"
   },
   "author": "",
   "license": "ISC"

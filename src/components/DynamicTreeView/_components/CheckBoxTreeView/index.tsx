@@ -22,9 +22,9 @@ import {
   SaveSharp
 } from "@material-ui/icons";
 import { map, isArray, indexOf, compact } from "lodash";
-import { ClListProps, ClListItem, ClListState } from "./_dataTypes";
+import { CheckBoxTreeViewProps, CheckBoxTreeViewState, TreeNode } from "./_dataTypes";
 import NodeModel from "./_nodeModel";
-
+import Loading from "../../../Loading";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -50,57 +50,43 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
+const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
   const classes = useStyles();
-  const initialChecked: Array<string | number> = [];
-  const initialOpen: Array<string | number> = [];
-  const initialSearch: string = "";
-  const collapsibelTreeView = props.collapsibelTreeView || false;
-  const showSelectAll = props.showSelectAll || true;
-  const [treeState, setTreeState] = React.useState<ClListState>({
-    checked: initialChecked,
-    open: initialOpen,
-    search: initialSearch
-  });
-  const [searchString, setSearch] = React.useState("");
   const updateButtonLabel = props.updateButtonLabel || "Update View";
-  let nodes: NodeModel = new NodeModel(props.items, treeState, searchString);
+  const initNodeData: CheckBoxTreeViewState = {
+      checked: props.checkedItems || [],
+      open: props.openItems || [],
+      search: props.searchString || ""
+    }
+  let nodes: NodeModel = new NodeModel(props.treeItems, initNodeData);
 
   const handleOpen = (value: string | number) => () => {
     nodes.selectOpen(value);
-    setTreeState({
-      checked: [...treeState.checked],
-      open: nodes.open,
-      search: treeState.search
-    });
+    props.setOpen(nodes.open);
   };
 
   const handleToggle = (value: string | number) => () => {
-    if (indexOf(treeState.checked, value) === -1) {
+    if (indexOf(props.checkedItems, value) === -1) {
       nodes.selectItems(value);
     } else {
       nodes.deSelectItems(value);
     }
-    setTreeState({
-      open: [...treeState.open],
-      checked: nodes.checked,
-      search: treeState.search
-    });
+    props.setChecked(nodes.checked);
   };
 
   const handleSearch = (name: string) => (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSearch(event.target.value);
+    props.setSearch(event.target.value);
   };
   const getFilterHighlight = (label: string) => {
     let text;
-    const start = label.toLowerCase().indexOf(searchString.toLowerCase());
-    if (searchString && start !== -1) {
-      const end = start + `${searchString}`.length;
+    const start = label.toLowerCase().indexOf(props.searchString.toLowerCase());
+    if (props.searchString && start !== -1) {
+      const end = start + `${props.searchString}`.length;
       text = (
         <ListItemText className={classes.smallFont} id={label}>
-          {start === 0 ? "" : label.slice(0, start - 1)}
+          {start === 0 ? "" : label.slice(0, start)}
           <span className={classes.highlight}>{label.slice(start, end)}</span>
           {label.slice(end)}
         </ListItemText>
@@ -116,16 +102,16 @@ const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
     return text;
   };
 
-  const getlist = (items?: Array<ClListItem>, depth: number = 0) => {
+  const getlist = (items?: Array<TreeNode>, depth: number = 0) => {
     depth++;
     const list = map(items, listItem => {
       return listItem ? (
         <Fragment key={`fragment-${listItem.value}`}>
           <ListItem key={listItem.value} role={undefined}>
-            {collapsibelTreeView && (
+            {props.collapsibelTreeView && (
               <IconButton onClick={handleOpen(listItem.value)}>
                 {isArray(listItem.children) && listItem.children.length > 0 ? (
-                  treeState.open.indexOf(`${listItem.value}`) !== -1 ? (
+                  props.openItems.indexOf(`${listItem.value}`) !== -1 ? (
                     <IndeterminateCheckBoxOutlined />
                   ) : (
                     <AddBoxOutlined />
@@ -137,7 +123,7 @@ const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
             )}
             <Checkbox
               edge="start"
-              checked={treeState.checked.indexOf(listItem.value) !== -1}
+              checked={props.checkedItems.indexOf(listItem.value) !== -1}
               tabIndex={-1}
               disableRipple={true}
               onClick={handleToggle(listItem.value)}
@@ -146,8 +132,8 @@ const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
           </ListItem>
           <Collapse
             in={
-              !collapsibelTreeView ||
-              treeState.open.indexOf(`${listItem.value}`) !== -1
+              !props.collapsibelTreeView ||
+              props.openItems.indexOf(`${listItem.value}`) !== -1
             }
           >
             {getlist(listItem.children, depth)}
@@ -155,12 +141,12 @@ const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
         </Fragment>
       ) : null;
     });
-    if (depth === 1 && showSelectAll) {
+    if (depth === 1 && props.showSelectAll) {
       const allitem = (
         <ListItem key="all" role={undefined}>
           <Checkbox
             edge="start"
-            checked={treeState.checked.indexOf("all") !== -1}
+            checked={props.checkedItems.indexOf("all") !== -1}
             tabIndex={-1}
             disableRipple
             onClick={handleToggle("all")}
@@ -170,6 +156,7 @@ const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
       );
       list.unshift(allitem);
     }
+
     return (
       <List className={depth > 1 ? classes.nested : classes.root}>
         {compact(list)}
@@ -187,7 +174,7 @@ const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
   };
   return (
     <React.Fragment>
-      <Box className={classes.listcontainer}>{list}</Box>
+      <Box className={classes.listcontainer}>{ props.loading ? <Loading/> : list}</Box>
       <Grid container>
         <Grid item xs={6}>
           <Box color={"text.disabled"}>
@@ -220,7 +207,7 @@ const CheckBoxTreeView: FunctionComponent<ClListProps> = props => {
         <TextField
           id="standard-name"
           label="Search"
-          value={searchString}
+          value={props.searchString}
           onChange={handleSearch("name")}
           margin="dense"
           variant="outlined"

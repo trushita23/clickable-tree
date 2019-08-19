@@ -1,28 +1,35 @@
 import React from "react";
 import { Grid, Paper, Box } from "@material-ui/core";
-import { DynamicTabs, CheckBoxTreeViewConfig } from "./components/SimpleTabs";
+import { Provider } from "react-redux";
+import { createStore, IModuleStore } from "redux-dynamic-modules-core";
+import { getSagaExtension } from "redux-dynamic-modules-saga";
+import { dynamicTabProps, dynamicTreeViewProps } from './config';
 
-const componentConfig: CheckBoxTreeViewConfig = {
-  title: "View Controller",
-  tabsUrl: "http://localhost:3001/jda/tabs",
-  tabPanelUrl: "http://localhost:3001/jda/tabs", // tab value gets appended to this URL
-  collapsibelTreeView: false,
-  showSelectAll: true,
-  updateButton: true
-};
+import DynamicTabs from "./components/DynamicTabs";
+import Title from './components/Title';
+import DynamicTreeView from './components/DynamicTreeView';
+
+const store: IModuleStore<{}> = createStore({
+  extensions: [getSagaExtension()]
+});
+
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Grid container spacing={0}>
-        <Grid item xs={3}>
-          <Paper>
-            <Box p={1}>
-              <DynamicTabs {...componentConfig}>Loading..</DynamicTabs>
-            </Box>
-          </Paper>
+    <Provider store={store}>
+      <div className="App">
+        <Grid container spacing={0}>
+          <Grid item xs={4}>
+            <Paper>
+              <Box p={1}>
+                <Title title="View Controller"/>
+                <DynamicTabs {...dynamicTabProps}>Loading..</DynamicTabs>
+                <DynamicTreeView {...dynamicTreeViewProps}>Loading...</DynamicTreeView>
+              </Box>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
+      </div>
+    </Provider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { ClListItem, PropertyObject, ClListState } from "./_dataTypes";
+import { ClListItem, PropertyObject, CheckBoxTreeViewState } from "./_dataTypes";
 import { indexOf, forEach, remove, intersection, isArray, omit } from "lodash";
 
 export default class NodeModel {
@@ -18,13 +18,12 @@ export default class NodeModel {
 
   constructor(
     listItems: Array<ClListItem>,
-    initValues: ClListState,
-    searchString: string
+    initValues: CheckBoxTreeViewState
   ) {
     this.listItems = listItems;
     this.checked = initValues.checked;
     this.open = initValues.open;
-    this.searchString = searchString;
+    this.searchString = initValues.search;
 
     this.flatten(listItems);
     this.setPath(listItems);

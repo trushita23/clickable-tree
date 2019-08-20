@@ -10,7 +10,7 @@ export function* getTreeItems(action: any) {
       put({ type: SET_ITEMS, payload: json })
     ]);
   } else {
-    yield put({ type: SET_ITEMS, payload: [] });
+    return [];//put({ type: SET_ITEMS, payload: [] });
   }
 }
 

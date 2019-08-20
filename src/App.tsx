@@ -8,8 +8,8 @@ import { dynamicTabProps, dynamicTreeViewProps } from './config';
 import DynamicTabs from "./components/DynamicTabs";
 import Title from './components/Title';
 import DynamicTreeView from './components/DynamicTreeView';
-
-const store: IModuleStore<{}> = createStore({
+import AppState from './state.type';
+const store: IModuleStore<AppState> = createStore({
   extensions: [getSagaExtension()]
 });
 

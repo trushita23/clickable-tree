@@ -19,7 +19,7 @@ export interface SetCheckedFunction {
 }
 
 export interface GetTreeDataFunction {
-  (url: string): void;
+  (url: string, selectedTab : string): void;
 }
 
 export interface SelectedTabFunction {

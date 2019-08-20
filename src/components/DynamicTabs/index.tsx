@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import { getTabTransitionModule, GET_ITEMS, SET_TAB_INDEX, SET_TAB_VALUE } from './_redux';
 import { SimpleTabs } from './_components/Simpletabs';
 import { DynamicTabProps, TabState } from './_datatypes';
-// let dispatched = false;
+
 const ConnectedTabs: FC<DynamicTabProps> = (props) => {
   if(props.tabItems.length === 0 && props.tabsUrl) {
     props.getTabItems(props.tabsUrl);
@@ -17,6 +17,12 @@ const ConnectedTabs: FC<DynamicTabProps> = (props) => {
   )
 }
 
+export const tabStateInit : TabState = {
+  tabIndex: 0,
+  tabValue: "",
+  loading: true,
+  tabItems: []
+}
 const mapStateToProps = (state: any) => {
   if(!state.tabState) {
     return {};

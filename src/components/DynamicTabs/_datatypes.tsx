@@ -9,7 +9,7 @@ export interface TabItem {
 }
 
 export interface TabState {
-  tabIndex: string;
+  tabIndex: number | string;
   tabValue: string;
   tabItems: ReadonlyArray<TabItem>;
   loading: boolean;

@@ -3,11 +3,12 @@ import { Grid, Paper, Box } from "@material-ui/core";
 import { Provider } from "react-redux";
 import { createStore, IModuleStore } from "redux-dynamic-modules-core";
 import { getSagaExtension } from "redux-dynamic-modules-saga";
-import { dynamicTabProps, dynamicTreeViewProps } from './config';
+import { dynamicTabProps, dynamicTreeViewProps, commentPanelProps } from './config';
 
 import DynamicTabs from "./components/DynamicTabs";
 import Title from './components/Title';
 import DynamicTreeView from './components/DynamicTreeView';
+import CommentPanel from './components/CommentPanel'
 import AppState from './state.type';
 const store: IModuleStore<AppState> = createStore({
   extensions: [getSagaExtension()]
@@ -25,6 +26,11 @@ const App: React.FC = () => {
                 <DynamicTabs {...dynamicTabProps}>Loading..</DynamicTabs>
                 <DynamicTreeView {...dynamicTreeViewProps}>Loading...</DynamicTreeView>
               </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={8}>
+            <Paper>
+              <CommentPanel {...commentPanelProps}>Loading...</CommentPanel>
             </Paper>
           </Grid>
         </Grid>

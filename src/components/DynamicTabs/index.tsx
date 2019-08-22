@@ -3,8 +3,8 @@ import {DynamicModuleLoader} from 'redux-dynamic-modules';
 import {connect} from 'react-redux';
 
 import { getTabTransitionModule, GET_ITEMS, SET_TAB_INDEX, SET_TAB_VALUE } from './_redux';
-import { SimpleTabs } from './_components/Simpletabs';
-import { DynamicTabProps, TabState } from './_datatypes';
+import SimpleTabs from './_components/Simpletabs';
+import { DynamicTabProps, TabState } from './_dataTypes';
 
 const ConnectedTabs: FC<DynamicTabProps> = (props) => {
   if(props.tabItems.length === 0 && props.tabsUrl) {
@@ -40,4 +40,4 @@ const mapDispatchToProps = (dispatch: Function) => {
 
 const DynamicTabs = connect(mapStateToProps, mapDispatchToProps)(ConnectedTabs);
 export default DynamicTabs;
-export * from './_datatypes';
+export * from './_dataTypes';

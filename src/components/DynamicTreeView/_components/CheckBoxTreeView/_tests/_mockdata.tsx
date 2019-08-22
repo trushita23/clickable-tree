@@ -1,5 +1,5 @@
 export const initialProps = {
-  items: [
+  treeItems: [
     {
       label: "India",
       value: "India",
@@ -131,5 +131,18 @@ export const initialProps = {
       ]
     }
   ],
-  collapsibelTreeView: false
+  loading: true,
+  tabChanged: false,
+  openItems :[],
+  searchString : "",
+  checkedItems: [],
+  selectedTab: "",
+    treeDataUrl: "",
+    getTreeData: () => {},
+    setChecked: () => {},
+    setOpen: () => {},
+    setSearch: () => {},
+    setSelectedTab: () => {},
+    collapsibelTreeView: false,
+    showSelectAll: false
 };

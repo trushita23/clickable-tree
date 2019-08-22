@@ -6,7 +6,7 @@ import {
   SET_OPEN,
   SET_SELECETED_TAB
 } from "./_actions";
-export default function checkboxChecked(state: any, action: any) {
+export function checkboxChecked(state: any, action: any) {
   switch (action.type) {
     case SET_ITEMS:
       return Object.assign({}, state, { treeItems: action.payload });
@@ -18,7 +18,10 @@ export default function checkboxChecked(state: any, action: any) {
     case SET_SEARCH:
       return Object.assign({}, state, { searchString: action.payload });
     case SET_OPEN:
-      return Object.assign({}, state, { openItems: action.payload });
+      return Object.assign({}, state, {
+        openItems: action.payload,
+        checkedStatus: !state.checkedStatus
+      });
     case SET_SELECETED_TAB:
       return Object.assign({}, state, { selectedTab: action.payload });
     case SET_LOADING:

@@ -1,5 +1,6 @@
-export const initialProps = {
-  items: [
+import { DynamicTreeViewConfig} from '../_dataTypes'
+export const initialProps: DynamicTreeViewConfig = {
+  treeItems: [
     {
       label: "India",
       value: "India",
@@ -131,5 +132,18 @@ export const initialProps = {
       ]
     }
   ],
-  collapsibelTreeView: false
+  loading: true,
+  tabChanged: false,
+  openItems :[],
+  searchString : "",
+  checkedItems: [],
+  selectedTab: "",
+    treeDataUrl: "",
+    getTreeData: () => {},
+    setChecked: () => {},
+    setOpen: () => {},
+    setSearch: () => {},
+    setSelectedTab: () => {},
+    collapsibelTreeView: false,
+    showSelectAll: false
 };

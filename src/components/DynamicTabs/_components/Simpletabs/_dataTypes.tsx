@@ -1,5 +1,5 @@
 import React from "react";
-import { DynamicTabProps } from '../../_datatypes';
+import { DynamicTabProps } from '../../_dataTypes';
 export interface TabItem {
   label: string;
   value: string;

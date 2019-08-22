@@ -12,7 +12,7 @@ import {
   SET_SELECETED_TAB
 } from "./_redux";
 import CheckBoxTreeView from "./_components/CheckBoxTreeView";
-import { DynamicTreeViewConfig, DynamicTreeState } from "./_datatypes";
+import { DynamicTreeViewConfig, DynamicTreeState } from "./_dataTypes";
 
 export const dynamicTreeStateInit: DynamicTreeState = {
   loading: true,
@@ -87,4 +87,4 @@ const DynamicTreeView = connect(
   mapDispatchToProps
 )(ConnectedTreeView);
 export default DynamicTreeView;
-export * from "./_datatypes";
+export * from "./_dataTypes";

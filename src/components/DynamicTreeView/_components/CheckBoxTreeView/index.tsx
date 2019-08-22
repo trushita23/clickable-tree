@@ -205,9 +205,9 @@ const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
       </Grid>
       <Box m={1}>
         <TextField
-          id="standard-name"
+          id="search-string"
           label="Search"
-          value={props.searchString}
+          value={props.searchString || ""}
           onChange={handleSearch("name")}
           margin="dense"
           variant="outlined"

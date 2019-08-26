@@ -27,9 +27,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    //setTabIndex: (index: number) => {dispatch({ type: SET_TAB_INDEX, payload: index })},
-    //setTabValue: (tabValue: string) => dispatch({ type: SET_TAB_VALUE, payload: tabValue }),
-    
     getCommentList: (url: string) => {dispatch({ type: GET_COMMENTS, url })}
   };
 };

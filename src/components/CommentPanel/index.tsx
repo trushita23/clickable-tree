@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import { CommentsProps } from './_datatypes';
 import {DynamicModuleLoader} from 'redux-dynamic-modules';
 import {connect} from 'react-redux';
-import { getCommentModule, GET_COMMENTS, SET_COMMENTS } from './_redux';
+import { getCommentModule, GET_COMMENTS} from './_redux';
 import { CommentBox } from './_components/CommentBox';
 //import {http} from '../../config/http';
 //import { commentPanelProps} from '../../config/index';

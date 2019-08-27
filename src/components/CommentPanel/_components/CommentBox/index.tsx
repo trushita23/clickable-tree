@@ -11,7 +11,6 @@ import {
   Button
 } from "@material-ui/core";
 import { CommentList } from "../CommentList";
-import { CommentData } from "./_dataTypes";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,10 +25,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     head: {
       fontSize: ".7rem"
-    }
+    },
+    button: {
+      margin: theme.spacing(.5),
+    },
+    input: {
+      display: 'none',
+    },
   })
 );
 
+// TODO: Need to change any to a specific type.
 export const CommentBox: FC<any> = props => {
   const classes = useStyles();
   const saveButtonLabel = "save";
@@ -58,16 +64,16 @@ export const CommentBox: FC<any> = props => {
         </TableHead>
         <CommentList {...props} />
       </Table>
-      <Box m={1}>
-        <Button variant="contained" color="primary">
+      <Box m={1} display="flex" justifyContent="flex-end">
+        <Button variant="contained" color="primary" className={classes.button}>
           {saveButtonLabel}
         </Button>
-        
-        <Button variant="contained" color="primary">
+
+        <Button variant="contained" color="primary" className={classes.button}>
           {shareButtonLabel}
         </Button>
 
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" className={classes.button}>
           {publishButtonLabel}
         </Button>
       </Box>

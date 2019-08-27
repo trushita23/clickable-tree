@@ -1,16 +1,7 @@
 import React, { FC } from "react";
 import {
-  Typography,
-  makeStyles,
-  createStyles,
-  Theme,
-  Table,
-  TableBody,
   TableCell,
-  TableHead,
   TableRow,
-  IconButton,
-  Box
 } from "@material-ui/core";
 import { CommentData } from "../CommentBox/_dataTypes";
 
@@ -18,7 +9,7 @@ export const Comment: FC<CommentData> = props => {
   return (
     <TableRow key ={props.id}>
       <TableCell component="th" scope="row">
-        <img width="50%" src="img/man.svg" />
+        <img width="50%" alt="profile" src="img/man.svg" />
         {props.user.firstName}
         {props.user.lastName}
       </TableCell>
@@ -26,7 +17,7 @@ export const Comment: FC<CommentData> = props => {
       <TableCell>{props.resPros}</TableCell>
       <TableCell>{props.resCons}</TableCell>
       <TableCell>
-        <img width="50%" src={props.scenarioRating} />
+        <img width="50%" alt="scenario rating" src={props.scenarioRating} />
       </TableCell>
       <TableCell>{props.approval}</TableCell>
     </TableRow>

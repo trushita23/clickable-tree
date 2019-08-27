@@ -1,6 +1,3 @@
-import React from "react";
-import { CommentsProps } from '../../_datatypes';
-
 export interface UserInfo {
   id: number;
   firstName: string;

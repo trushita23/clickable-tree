@@ -25,6 +25,7 @@
     "redux-dynamic-modules-saga": "^5.0.2",
     "redux-saga": "^1.0.5",
     "styled-components": "^4.3.2",
+    "tslint": "^5.19.0",
     "typescript": "3.5.3"
   },
   "scripts": {

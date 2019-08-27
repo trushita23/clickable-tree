@@ -1,6 +1,6 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
-import { shallow, configure } from "enzyme";
+import { shallow, configure, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import CheckBoxList from "../index";
 import { Typography } from "@material-ui/core";
@@ -28,21 +28,128 @@ describe("CollapsibleListWithCheckBox Component Testcases", () => {
     expect(container.find("#search-string").props()).toMatchObject({
       id: "search-string",
       label: "Search",
-      value: "",
+      value: "um",
       margin: "dense"
     });
   });
+  it("adds custom action for update button the update button", () => {
+    const updateButtonAction = jest.fn();
+    const props = Object.assign({}, initialProps, {
+      updateButtonAction: updateButtonAction
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const button = container.find("#update-view").first();
+    button.simulate("click", { target: { value: "India" } });
+    expect(updateButtonAction).toBeCalled();
+  });
 
   it("Should initialize the search String", () => {
-    const props = Object.assign({}, initialProps, {searchString : "India"});
-
+    const props = Object.assign({}, initialProps, { searchString: "India" });
     const container = shallow(<CheckBoxList {...props} />);
-    // container.find("#search-string").simulate("change", {
-    //   target: {
-    //     value: "India"
-    //   }
-    // });
+    container.find("#search-string").simulate("change", {
+      target: {
+        value: "India"
+      }
+    });
     expect(container.find("#search-string").prop("value")).toEqual("India");
+  });
+
+  it("Should  select all Items", () => {
+    const props = Object.assign({}, initialProps, {
+      checkedItems: [],
+      collapsibelTreeView: true
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const count = container.find({ type: "checkbox" }).length;
+    const target = container.find({ type: "checkbox" }).first();
+
+    target.simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
+  });
+
+  it("Should  deselect all Items", () => {
+    const props = Object.assign({}, initialProps, {
+      checkedItems: ["all"],
+      collapsibelTreeView: true
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const count = container.find({ type: "checkbox" }).length;
+    const target = container.find({ type: "checkbox" }).first();
+
+    target.simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
+  });
+
+  
+
+  it("Should select Items", () => {
+    const props = Object.assign({}, initialProps, {
+      checkedItems: [],
+      collapsibelTreeView: true
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const count = container.find({ type: "checkbox" }).length;
+    const target = container.find({ type: "checkbox" }).last();
+
+    target.simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
+  });
+
+  it("Should select Child Items", () => {
+    const props = Object.assign({}, initialProps, {
+      checkedItems: [],
+      collapsibelTreeView: true
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const count = container.find({ type: "checkbox" }).length;
+    const target = container.find({ type: "checkbox" }).at(7);
+
+    target.simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
+  });
+
+  it("Should deselect Child Items", () => {
+    const props = Object.assign({}, initialProps, {
+      checkedItems: ['India','Maharastra','Mumbai'],
+      collapsibelTreeView: true
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const count = container.find({ type: "checkbox" }).length;
+    const target = container.find({ type: "checkbox" }).at(7);
+
+    target.simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
+  });
+
+  it("Should  deselect Items", () => {
+    const props = Object.assign({}, initialProps, {
+      checkedItems: ["India", "Maharastra", "Mumbai"],
+      collapsibelTreeView: true
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const count = container.find({ type: "checkbox" }).length;
+    const target = container.find({ type: "checkbox" }).last();
+
+    target.simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
+  });  
+  it("Should mark an Item as Open", () => {
+    const props = Object.assign({}, initialProps, {
+      checkedItems: ["Australia", "Victoria"],
+      collapsibelTreeView: true
+    });
+    const container = mount(<CheckBoxList {...props} />);
+    const count = container.find({ type: "checkbox" }).length;
+    container
+      .find({ id: "ico-collapse-India" })
+      .first()
+      .simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
+    container
+      .find({ id: "ico-collapse-India" })
+      .first()
+      .simulate("click");
+    expect(container.find({ type: "checkbox" }).length).toEqual(count);
   });
 
   // it("Should initialize the selectedTab", () => {

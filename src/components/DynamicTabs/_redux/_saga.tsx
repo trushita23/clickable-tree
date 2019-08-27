@@ -1,11 +1,12 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { SET_ITEMS, GET_ITEMS } from "./_actions";
+import axios  from 'axios';
 
 export function* getTabList(action: any) {
   if (action) {
-    const response = yield call(fetch, action.url);
-    const json = yield call([response, response.json]);
-    yield put({ type: SET_ITEMS, payload: json });
+    
+    let response = yield call(axios.get, action.url);
+    yield put({ type: SET_ITEMS, payload: response.data });
   } else {
     yield put({ type: SET_ITEMS, payload: [] });
    }

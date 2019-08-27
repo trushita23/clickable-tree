@@ -131,18 +131,19 @@ export const initialProps = {
       ]
     }
   ],
-  loading: true,
+  loading: false,
   tabChanged: false,
-  openItems :[],
-  searchString : "",
+  openItems: [],
+  searchString: "um",
   checkedItems: [],
   selectedTab: "",
-    treeDataUrl: "",
-    getTreeData: () => {},
-    setChecked: () => {},
-    setOpen: () => {},
-    setSearch: () => {},
-    setSelectedTab: () => {},
-    collapsibelTreeView: false,
-    showSelectAll: false
+  treeDataUrl: "",
+  getTreeData: () => {},
+  setChecked: () => {},
+  setOpen: () => {},
+  setSearch: () => {},
+  setSelectedTab: () => {},
+  collapsibelTreeView: false,
+  showSelectAll: true,
+  updateButton: true
 };

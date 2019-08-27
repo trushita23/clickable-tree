@@ -59,7 +59,6 @@ const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
       search: props.searchString || ""
     }
   let nodes: NodeModel = new NodeModel(props.treeItems, initNodeData);
-
   const handleOpen = (value: string | number) => () => {
     nodes.selectOpen(value);
     props.setOpen(nodes.open);
@@ -109,7 +108,7 @@ const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
         <Fragment key={`fragment-${listItem.value}`}>
           <ListItem key={listItem.value} role={undefined}>
             {props.collapsibelTreeView && (
-              <IconButton onClick={handleOpen(listItem.value)}>
+              <IconButton onClick={handleOpen(listItem.value)} id={`ico-collapse-${listItem.value}`}>
                 {isArray(listItem.children) && listItem.children.length > 0 ? (
                   props.openItems.indexOf(`${listItem.value}`) !== -1 ? (
                     <IndeterminateCheckBoxOutlined />
@@ -123,7 +122,7 @@ const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
             )}
             <Checkbox
               edge="start"
-              checked={props.checkedItems.indexOf(listItem.value) !== -1}
+              checked={props.checkedItems.indexOf(listItem.value) !== -1 || props.checkedItems.indexOf('all') !== -1}
               tabIndex={-1}
               disableRipple={true}
               onClick={handleToggle(listItem.value)}
@@ -141,13 +140,14 @@ const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
         </Fragment>
       ) : null;
     });
-    if (depth === 1 && props.showSelectAll) {
+    if (items && depth === 1 && props.showSelectAll) {
       const allitem = (
         <ListItem key="all" role={undefined}>
           <Checkbox
             edge="start"
             checked={props.checkedItems.indexOf("all") !== -1}
             tabIndex={-1}
+            id="select-all"
             disableRipple
             onClick={handleToggle("all")}
           />
@@ -164,7 +164,7 @@ const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
     );
   };
   const selectedCount: number = nodes.getSelectedCount();
-  const list = getlist(nodes.filterItems);
+  const list = nodes.filterItems.length ? getlist(nodes.filterItems) : [];
   const handleUpdateView: React.MouseEventHandler = (
     event: React.MouseEvent<Element, MouseEvent>
   ) => {
@@ -218,6 +218,7 @@ const CheckBoxTreeView: FunctionComponent<CheckBoxTreeViewProps> = props => {
         {props.updateButton && (
           <Button
             onClick={handleUpdateView}
+            id="update-view"
             variant="contained"
             color="primary"
             fullWidth

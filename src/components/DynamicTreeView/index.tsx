@@ -40,7 +40,7 @@ const ConnectedTreeView: FC<DynamicTreeViewConfig> = (props) => {
   );
 };
 
-const mapStateToProps = (state: any, ownProps: DynamicTreeViewConfig) => {
+export const mapStateToProps = (state: any, ownProps: DynamicTreeViewConfig) => {
   if (!state.treeviewState) {
     return ownProps;
   }
@@ -60,24 +60,24 @@ const mapStateToProps = (state: any, ownProps: DynamicTreeViewConfig) => {
   }
 };
 
-const mapDispatchToProps = (dispatch: Function) => {
+export const mapDispatchToProps = (dispatch: Function) => {
   return {
     setChecked: (checkedItems: Array<any>) => {
-      dispatch({ type: SET_CHECKED, payload: checkedItems });
+      return dispatch({ type: SET_CHECKED, payload: checkedItems });
     },
     setOpen: (openItems: Array<any>) => {
-      dispatch({ type: SET_OPEN, payload: openItems });
+      return dispatch({ type: SET_OPEN, payload: openItems });
     },
     setSearch: (search: string) => {
-      dispatch({ type: SET_SEARCH, payload: search });
+      return dispatch({ type: SET_SEARCH, payload: search });
     },
     setSelectedTab: (selectedTab: string) => {
-      dispatch({ type: SET_SELECETED_TAB, payload: selectedTab });
+      return dispatch({ type: SET_SELECETED_TAB, payload: selectedTab });
     },
     getTreeData: (url: string, tab : string) => {
       dispatch({ type: SET_LOADING, payload: true });
-      dispatch({ type: GET_ITEMS, url: url });
       dispatch({ type: SET_SELECETED_TAB, payload: tab })
+      return dispatch({ type: GET_ITEMS, url: url });
     }
   };
 };

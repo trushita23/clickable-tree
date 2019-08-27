@@ -9,7 +9,7 @@ import {
 export function checkboxChecked(state: any, action: any) {
   switch (action.type) {
     case SET_ITEMS:
-      return Object.assign({}, state, { treeItems: action.payload });
+      return Object.assign({}, state, { treeItems: action.payload, loading: false });
     case SET_CHECKED:
       return Object.assign({}, state, {
         checkedItems: action.payload,

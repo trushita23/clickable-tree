@@ -70,8 +70,10 @@
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "^24.0.17",
     "@types/sinon": "^7.0.13",
+    "axios-mock-adapter": "^1.17.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "jest-mock-axios": "^3.1.0",
     "sinon": "^7.4.1",
     "testcafe": "^1.4.0",
     "testcafe-react-selectors": "^3.1.0"

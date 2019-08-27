@@ -49,7 +49,6 @@ const SimpleTabs: FC<TabProps> = (props) => {
     props.setTabIndex(tabIndex);
     props.setTabValue(props.tabItems[tabIndex].value);
   };
-   
   return (
     <React.Fragment>
         { props.loading ?

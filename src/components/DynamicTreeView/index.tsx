@@ -44,16 +44,17 @@ export const mapStateToProps = (state: any, ownProps: DynamicTreeViewConfig) => 
   if (!state.treeviewState) {
     return ownProps;
   }
+  console.log('State', state);
   let tabChanged = false;
 
-  if (state.treeviewState.selectedTab !== state.tabState.tabValue) {
+  if (state.tabState && (state.treeviewState.selectedTab !== state.tabState.tabValue)) {
     tabChanged = true;
   }
   if ((state.treeviewState.treeItems || tabChanged)) {
     return {
       ...state.treeviewState,
       tabChanged: tabChanged,
-      selectedTab: state.tabState.tabValue
+      selectedTab: state.tabState ? state.tabState.tabValue : ""
     };
   } else {
     return ownProps;

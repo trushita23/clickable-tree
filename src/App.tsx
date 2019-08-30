@@ -11,6 +11,7 @@ const store: IModuleStore<AppState> = createStore({
 const App: React.FC = () => {
   return (
     <Provider store={store}>
+
       <Router>
         <Link to="/">Dashboard</Link> | <Link to="/comments">Comments</Link>
         <Switch>
@@ -26,6 +27,7 @@ const App: React.FC = () => {
           ></Route>
         </Switch>
       </Router>
+
     </Provider>
   );
 };

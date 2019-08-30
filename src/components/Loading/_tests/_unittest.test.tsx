@@ -9,7 +9,7 @@ configure({ adapter: new Adapter() });
 describe("Title Component Testcases", () => {
   it("Renders Title without Crashing", () => {
     const div = document.createElement("div");
-    ReactDOM.render(<Loading />, div);
+    ReactDOM.render(<Loading what="Unit Test"/>, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });

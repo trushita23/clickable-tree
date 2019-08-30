@@ -1,5 +1,6 @@
 // import createTestCafe from 'testcafe';
 import { waitForReact, ReactSelector } from 'testcafe-react-selectors'
+const fixture = global.fixture
 fixture `Navigation`.page `http://localhost:3000`
 
 test('Render SimpleTabs', async t => {

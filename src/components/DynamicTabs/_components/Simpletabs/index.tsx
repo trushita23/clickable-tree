@@ -52,7 +52,7 @@ const SimpleTabs: FC<TabProps> = (props) => {
   return (
     <React.Fragment>
         { props.loading ?
-            <Loading/>
+            <Loading what="data"/>
             :
           <Tabs
           indicatorColor="secondary"

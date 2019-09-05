@@ -1,0 +1,8 @@
+export const SET_COMMENT = 'SET_COMMENT'; // "Set comment"
+export const SET_RESOLUTION_PROS = 'SET_RESOLUTION_PROS'; // "Once loaded mark this as false"
+export const SET_RESOLUTION_CONS = 'SET_RESOLUTION_CONS'; // "Once loaded mark this as false"
+export const SET_SCENARIO = 'SET_SCENARIO'; // "Once loaded mark this as false"
+export const SET_APPROVAL = 'SET_APPROVAL'; // "Once loaded mark this as false"
+export const ADD_COMMENT = 'ADD_COMMENT'; // "Once loaded mark this as false"
+export const CLEAR_COMMENT = 'CLEAR_COMMENT'; // "Once loaded mark this as false"
+export const SET_LOADING = 'SET_LOADING'; // "Once loaded mark this as false"

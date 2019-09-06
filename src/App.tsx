@@ -3,12 +3,19 @@ import { Grid, Paper, Box, Typography } from "@material-ui/core";
 import { Provider } from "react-redux";
 import { createStore, IModuleStore } from "redux-dynamic-modules-core";
 import { getSagaExtension } from "redux-dynamic-modules-saga";
-import { dynamicTabProps, dynamicTreeViewProps } from './config';
+import {
+  dynamicTabProps,
+  dynamicTreeViewProps,
+  commentPanelProps
+} from "./config";
 
 import DynamicTabs from "./components/DynamicTabs";
-import Title from './components/Title';
-import DynamicTreeView from './components/DynamicTreeView';
-import AppState from './state.type';
+import Title from "./components/Title";
+import DynamicTreeView from "./components/DynamicTreeView";
+import AppState from "./state.type";
+import CommentPanel from "./components/CommentPanel";
+import ScenarioSummaryContainer from "./components/ScenarioSummary";
+
 const store: IModuleStore<AppState> = createStore({
   extensions: [getSagaExtension()]
 });
@@ -21,11 +28,25 @@ const App: React.FC = () => {
           <Grid item xs={4}>
             <Paper>
               <Box p={1}>
-                <Title title="View Controller"/>
-                <DynamicTabs {...dynamicTabProps}><Typography>Loading..</Typography></DynamicTabs>
-                <DynamicTreeView {...dynamicTreeViewProps}><Typography>Loading..</Typography></DynamicTreeView>
+                <Title title="View Controller" />
+                <DynamicTabs {...dynamicTabProps}>
+                  <Typography>Loading..</Typography>
+                </DynamicTabs>
+                <DynamicTreeView {...dynamicTreeViewProps}>
+                  <Typography>Loading..</Typography>
+                </DynamicTreeView>
               </Box>
             </Paper>
+          </Grid>
+          <Grid item xs={8}>
+            <Paper>
+              <CommentPanel {...commentPanelProps}>Loading...</CommentPanel>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={12}>
+            <ScenarioSummaryContainer />
           </Grid>
         </Grid>
       </div>

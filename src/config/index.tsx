@@ -1,5 +1,6 @@
 import { DynamicTabProps } from "../components/DynamicTabs";
 import { DynamicTreeViewConfig } from '../components/DynamicTreeView';
+import { CommentsProps} from '../components/CommentPanel';
 
 export const dynamicTabProps: DynamicTabProps = {
     tabsUrl: "http://localhost:3001/jda/tabs", // TODO: Should be able to accept JSON or a callback to getch data
@@ -33,3 +34,10 @@ export const dynamicTreeViewProps: DynamicTreeViewConfig ={
     updateButtonLabel: "Update view",
     loading: true
 }
+
+export const commentPanelProps: CommentsProps = {
+  commentList:[],
+  getCommentList: () => {},
+  commentUrl: "http://localhost:3001/jda/comments",
+  loading: true
+};

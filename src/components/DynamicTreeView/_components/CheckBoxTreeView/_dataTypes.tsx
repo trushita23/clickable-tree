@@ -1,4 +1,4 @@
-import { DynamicTreeViewConfig } from '../../_dataTypes';
+import { DynamicTreeViewConfig } from '../../_datatypes';
 export interface ClListItem {
   label: string;
   value: string;
@@ -42,4 +42,4 @@ export interface CheckBoxTreeViewConfig {
   updateButtonLabel?: string;
   onSelectItem?: Function;
 }
-export * from '../../_dataTypes'
+export * from '../../_datatypes'

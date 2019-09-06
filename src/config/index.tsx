@@ -22,7 +22,7 @@ export const dynamicTreeViewProps: DynamicTreeViewConfig ={
     checkedItems: [],
     selectedTab: "",
     treeDataUrl: "http://localhost:3001/jda/tabs",
-    getTreeData: (data, tab) => {},
+    getTreeData: (data) => {},
     setChecked: (data) => {},
     setOpen: (data) => {},
     setSearch: (data) => {},

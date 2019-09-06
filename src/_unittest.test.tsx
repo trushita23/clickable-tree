@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { shallow, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import DynamicTabs from "./components/DynamicTabs";
+import { DynamicTabs } from "./components/SimpleTabs";
 
 configure({ adapter: new Adapter() });
 
-describe.only("Testing App", () => {
+describe("Testing App", () => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
     ReactDOM.render(<App />, div);

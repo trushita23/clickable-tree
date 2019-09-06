@@ -18,12 +18,9 @@ export const tabItems = [
 ];
 
 export const componentConfig = {
+    title: "View Controller",
     tabsUrl: "http://localhost:3001/jda/tabs",
-    getTabItems: (data: any) => { return data},
-    setTabIndex: (data: any) => {return data},
-    setTabValue: (data: any) => {return data},
-    tabIndex: 0,
-    tabValue: 'Country',
-    tabItems: [],
-    loading: true
+    tabPanelUrl: "http://localhost:3001/jda/tabs", // tab value gets appended to this URL
+    collapsibelTreeView: false,
+    showSelectAll: true
   };

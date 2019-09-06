@@ -1,4 +1,4 @@
-import { checkboxChecked } from './_reducers';
+import checkboxChecked from './_reducers';
 import { getTreeItems,loadChecklist} from './_saga'; 
 
 export function getCheckBoxCheckedModule() {

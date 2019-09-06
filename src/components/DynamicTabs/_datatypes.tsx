@@ -8,18 +8,15 @@ export interface TabItem {
   checked?: false;
 }
 
-export interface TabState {
-  tabIndex: number | string;
-  tabValue: string;
-  tabItems: ReadonlyArray<TabItem>;
-  loading: boolean;
-}
-
-export interface DynamicTabProps extends TabState  {
+export interface DynamicTabProps  {
   tabsUrl: string;
   getTabItems: Function;
   setTabIndex: Function;
   setTabValue: Function;
+  tabIndex: number;
+  tabValue: string;
+  tabItems: ReadonlyArray<TabItem>;
+  loading: boolean;
   tabOnChange?: TriggerFunction;
   renderPanel?: Function;
   collapsibelTreeView?: boolean;

@@ -19,24 +19,21 @@ export interface SetCheckedFunction {
 }
 
 export interface GetTreeDataFunction {
-  (url: string, selectedTab : string): void;
+  (url: string): void;
 }
 
 export interface SelectedTabFunction {
   (selectedTab: string): void;
 }
 
-export interface DynamicTreeState {
-  loading: boolean;
-  tabChanged: boolean;
-  treeItems: Array<TreeNode>;
-  openItems :Array<any>;
-  searchString : string;
-  checkedItems: Array<any>;
-  selectedTab: string;
-}
-
-export interface DynamicTreeViewConfig extends DynamicTreeState {
+export interface DynamicTreeViewConfig {
+    loading: boolean;
+    tabChanged: boolean;
+    treeItems: Array<TreeNode>;
+    openItems :Array<any>;
+    searchString : string;
+    checkedItems: Array<any>;
+    selectedTab: string;
     treeDataUrl: string;
     getTreeData: GetTreeDataFunction;
     setChecked: SetCheckedFunction;
@@ -48,4 +45,5 @@ export interface DynamicTreeViewConfig extends DynamicTreeState {
     updateButton?: boolean;
     updateButtonAction?: React.MouseEventHandler;
     updateButtonLabel?: string;
+    
   }

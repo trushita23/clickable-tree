@@ -1,6 +1,7 @@
 import { DynamicTabProps } from "../components/DynamicTabs";
 import { DynamicTreeViewConfig } from '../components/DynamicTreeView';
 import { CommentsProps} from '../components/CommentPanel';
+import { AddCommentConfig } from '../components/CreateComment';
 export const dynamicTabProps: DynamicTabProps = {
     tabsUrl: "http://localhost:3001/jda/tabs", // TODO: Should be able to accept JSON or a callback to getch data
     collapsibelTreeView: false,
@@ -40,3 +41,21 @@ export const commentPanelProps: CommentsProps = {
     commentUrl: "http://localhost:3001/jda/comments",
     loading: true
   };
+
+  export const createCommentProps: AddCommentConfig = {
+    ColumnName: ['Comments', 'Resolution Pros', 'Resolution Cons', 'Scenario Rating', 'Approval (Required)'],
+    comment: '',
+    resolutionPros: '',
+    resolutionCons: '',
+    rating: '',
+    approval: '',
+    loading: true,
+    setComment: () => {},
+    setResolutionPros: () => {},
+    setResolutionCons: () => {},
+    setScenario: () => {},
+    setApproval: () => {},
+    setRating: () => {},
+    addComment: () => {},
+    clearComment: () => {},
+};

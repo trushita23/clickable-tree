@@ -70,7 +70,7 @@ const theme = createMuiTheme({
     },
     MuiIconButton: {
       root: {
-        padding: 0
+        padding: 10
       }
     },
     textField: {

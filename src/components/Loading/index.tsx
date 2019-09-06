@@ -1,10 +1,12 @@
 import React, { FC } from "react";
-import { Paper, LinearProgress } from "@material-ui/core";
+import { Paper, LinearProgress, Typography } from "@material-ui/core";
 
 const Loading: FC<{}> = props => {
   return (
     <Paper>
-      "Loading..."
+      <Typography>
+        Loading
+      </Typography>
       <LinearProgress />
     </Paper>
   );

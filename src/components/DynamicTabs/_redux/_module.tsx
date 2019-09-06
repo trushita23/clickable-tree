@@ -1,4 +1,4 @@
-import tabTransition from './_reducers';
+import { tabTransition } from './_reducers';
 import { tabTransitionAsync,getTabList} from './_saga'; 
 
 export function getTabTransitionModule() {

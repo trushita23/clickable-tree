@@ -1,5 +1,5 @@
 import { SET_TAB_INDEX, SET_TAB_VALUE, SET_ITEMS, SET_LOADING } from "./_actions";
-export default function tabTransition(state: string, action: any) {
+export function tabTransition(state: any, action: any) {
   switch (action.type) {
     case SET_TAB_VALUE:
       return Object.assign({}, state, { tabValue: action.payload });

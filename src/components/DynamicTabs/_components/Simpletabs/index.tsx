@@ -4,7 +4,6 @@ import { Tabs, Tab} from "@material-ui/core";
 
 
 import { TabItem, TabProps, TriggerFunction } from "./_dataTypes";
-import { a11yProps } from "./_utils";
 import Loading from "../../../Loading";
 // import theme from "../../../../theme/muiTheme";
 
@@ -28,7 +27,6 @@ const getTabsList = (items: ReadonlyArray<TabItem>) => {
         key={"tab-" + key}
         style={{ zIndex: 1000 }}
         label={item.label}
-        {...a11yProps(key, item.a11y)}
       />
     )
   );
@@ -39,7 +37,7 @@ const getTabs = (items: ReadonlyArray<TabItem>) => {
     return getTabsList(items);
 };
 
-export const SimpleTabs: FC<TabProps> = (props) => {
+const SimpleTabs: FC<TabProps> = (props) => {
   // const {tabItems, tabOnChange, tabValue, tabIndex, ...tabProps} = props;
   
   // const classes = useStyles();
@@ -51,7 +49,6 @@ export const SimpleTabs: FC<TabProps> = (props) => {
     props.setTabIndex(tabIndex);
     props.setTabValue(props.tabItems[tabIndex].value);
   };
-   
   return (
     <React.Fragment>
         { props.loading ?
@@ -71,5 +68,5 @@ export const SimpleTabs: FC<TabProps> = (props) => {
     </React.Fragment>
   );
 };
-
+export default SimpleTabs;
 export * from "./_dataTypes";

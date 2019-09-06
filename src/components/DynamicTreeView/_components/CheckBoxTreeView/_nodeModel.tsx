@@ -47,9 +47,7 @@ export default class NodeModel {
             this.ptoc[parent.value] = [child.value];
           }
           // Set the values for Child to Parent Properties
-          if (this.ctop.hasOwnProperty(child.value)) {
-            this.ctop[child.value].push(parent.value);
-          } else {
+          if (!this.ctop.hasOwnProperty(child.value)) {
             this.ctop[child.value] = [parent.value];
           }
         });
